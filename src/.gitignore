@@ -1,0 +1,93 @@
+# Build-Ausgaben
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Rr]elease/
+[Dd]ebug/
+x64/
+x86/
+[Ww]in32/
+ipch/
+[Aa]rtifacts/
+
+# VS-Konfigurationsordner
+.vs/
+.vscode/
+
+# Benutzerbezogene Dateien (nie einchecken)
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+*.vcproj.*.user
+
+# Intellisense / Browser-Datenbank
+*.ncb
+*.sdf
+*.opensdf
+*.sbr
+*.dbmdl
+
+# Zwischendateien / Kompilat
+*.obj
+*.pch
+*.pdb
+*.idb
+*.ilk
+*.log
+*.tlog
+*.tmp
+*.temp
+
+# Libraries & Exes (wenn sie nur Build-Output sind)
+*.exe
+*.dll
+*.lib
+*.exp
+*.pyd
+
+# Profiler / Analyse-Dateien
+*.pgc
+*.pgd
+*.vsp
+*.vspx
+*.psess
+*.vspx
+*.vspscc
+
+# Crash Dumps
+*.dmp
+
+# Installer-/Setup-Ausgaben
+*.msi
+*.msm
+*.msp
+
+# Test-/Coverage-Ergebnisse
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Sonstige temporäre Dateien
+*.cache
+*.bak
+*.swp
+*~
+
+#############################
+# OS-spezifisch
+#############################
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
