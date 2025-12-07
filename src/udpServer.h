@@ -8,7 +8,7 @@
 class UDPMessageCallback {
 public:
     virtual ~UDPMessageCallback() = default;
-    virtual void handleMessage(char* message, int length) = 0;
+    virtual void handleMessage(char* message, u32 length) = 0;
 };
 
 class UDPServer {

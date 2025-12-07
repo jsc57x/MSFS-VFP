@@ -80,15 +80,23 @@ void UDPServer::handleSocket(UDPMessageCallback* callback)
     {
         recvLen = recvfrom(sock, buffer, sizeof(buffer) - 1, 0, (struct sockaddr*)&clientAddr, &clientAddrLen);
 
-        if (isRunning && recvLen == SOCKET_ERROR) {  
+        // is UDP server stopped?
+        if (!isRunning)
+        {
+            return;
+        }
+
+        if (recvLen == SOCKET_ERROR) {  
             printf("recvfrom() Fehler: %d\n", WSAGetLastError());
             break;
         }
 
-        buffer[recvLen] = '\0';
-
+        
+        // TODO Debug-Output entfernen
         printf("Empfangen: %s\n",
             buffer);
+
+        callback->handleMessage(buffer, recvLen);
     }
 }
 

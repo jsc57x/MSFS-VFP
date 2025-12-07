@@ -7,6 +7,8 @@
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
+#include <vector>
+#include <sstream>
 #include "TestFlightPathProvider.h"
 
 #define PROG_NAME "MSFS Flight Path Visualizer Test Provider"
@@ -14,7 +16,6 @@
 
 #define DEFAULT_SEND_IP_ADDR "127.0.0.1"
 #define DEFAULT_SEND_UDP_PORT 10388
-
 
 int main(int argc, char* argv[])
 {
@@ -123,19 +124,48 @@ void processFile(int targetUPDPort, std::string filePath)
     {
         std::string row;
         std::getline(testDataFile, row);
-        std::cout << row << std::endl;
 
-        int lineLength = (int)strlen(row.c_str());
-
-        res = sendto(udpTarget, row.c_str(), lineLength, 0, (sockaddr*)&localAddr, sizeof(localAddr));
-
-        if (res == SOCKET_ERROR)
-        {
-            std::cerr << "Failed to send row :\"" << row << " with error " << WSAGetLastError() << std::endl;
-        }
+        sendData(udpTarget, localAddr, row);
     }
 
     closesocket(udpTarget);
     WSACleanup();
     testDataFile.close();
+}
+
+
+int sendData(SOCKET sock, sockaddr_in addr, std::string row)
+{
+    int res;
+    int lineLength = (int)strlen(row.c_str());
+
+    std::cout << "Sending to " << addr.sin_port << std::endl;
+
+    res = sendto(sock, row.c_str(), lineLength, 0, (sockaddr*)&addr, sizeof(addr));
+
+    if (res == SOCKET_ERROR)
+    {
+        std::cerr << "Failed to send row :\"" << row << " with error " << WSAGetLastError() << std::endl;
+    }
+
+    return res;
+}
+
+char* convertRowToRaw(std::string row, size_t* out_len)
+{
+    return 0;
+}
+
+std::vector<std::string> split(const std::string& s)
+    {
+            char delimiter = ';';
+    std::vector<std::string> tokens;
+    std::stringstream ss(s);
+    std::string item;
+
+    while (std::getline(ss, item, delimiter)) {
+        tokens.push_back(item);
+    }
+
+    return tokens;
 }
