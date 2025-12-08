@@ -126,9 +126,6 @@
   <ItemGroup>
     <ClCompile Include="TestFlightPathProvider.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TestFlightPathProvider.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -9,13 +9,29 @@
 #include <windows.h>
 #include <vector>
 #include <sstream>
-#include "TestFlightPathProvider.h"
 
 #define PROG_NAME "MSFS Flight Path Visualizer Test Provider"
 #define VERSION "0.0.1"
 
 #define DEFAULT_SEND_IP_ADDR "127.0.0.1"
 #define DEFAULT_SEND_UDP_PORT 10388
+
+#define SOURCE_FILE_DELIMITER ';'
+
+
+void processFile(int targetUPDPort, std::string filePath);
+
+void printHelp();
+
+int sendData(SOCKET sock, sockaddr_in addr, const char* row, int length);
+
+char* convertRowToRaw(std::string row, int* out_len);
+
+char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len);
+char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len);
+
+std::vector<std::string> split(const std::string& s);
+
 
 int main(int argc, char* argv[])
 {
@@ -40,6 +56,7 @@ int udpPort = DEFAULT_SEND_UDP_PORT;
             processFile(udpPort, filePath);
         }
     }
+    // TODO Raw-Parameter?
     else if (argc == 4)
     {
         if (strcmp(argv[1], "-p") != 0)
@@ -95,8 +112,6 @@ void processFile(int targetUPDPort, std::string filePath)
         return;
     }
 
-   
-
     udpTarget = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
     if (udpTarget == INVALID_SOCKET)
@@ -111,21 +126,27 @@ void processFile(int targetUPDPort, std::string filePath)
     localAddr.sin_port = htons(targetUPDPort);
     inet_pton(AF_INET, DEFAULT_SEND_IP_ADDR, &localAddr.sin_addr);
 
-    //// 4. Bind the socket to the local address and port
-    //res = bind(udpTarget, (sockaddr*)&localAddr, sizeof(localAddr));
-    //if (res == SOCKET_ERROR) {
-    //    std::cerr << "bind() failed, error: " << WSAGetLastError() << "\n";
-    //    closesocket(udpTarget);
-    //    WSACleanup();
-    //    return;
-    //}
-
+    bool sendRaw = false;
     while (testDataFile.good())
     {
         std::string row;
         std::getline(testDataFile, row);
 
-        sendData(udpTarget, localAddr, row);
+        if (row == "<raw>")
+        {
+            sendRaw = true;
+            continue;
+        }
+
+        if (sendRaw)
+        {
+            sendData(udpTarget, localAddr, row.c_str(), (int)strlen(row.c_str()));
+        }
+        else {
+            int length;
+            char* rawContent = convertRowToRaw(row, &length);
+            sendData(udpTarget, localAddr, rawContent, length);
+        }
     }
 
     closesocket(udpTarget);
@@ -134,14 +155,13 @@ void processFile(int targetUPDPort, std::string filePath)
 }
 
 
-int sendData(SOCKET sock, sockaddr_in addr, std::string row)
+int sendData(SOCKET sock, sockaddr_in addr, const char* row, int length)
 {
     int res;
-    int lineLength = (int)strlen(row.c_str());
 
     std::cout << "Sending to " << addr.sin_port << std::endl;
 
-    res = sendto(sock, row.c_str(), lineLength, 0, (sockaddr*)&addr, sizeof(addr));
+    res = sendto(sock, row, length, 0, (sockaddr*)&addr, sizeof(addr));
 
     if (res == SOCKET_ERROR)
     {
@@ -151,20 +171,73 @@ int sendData(SOCKET sock, sockaddr_in addr, std::string row)
     return res;
 }
 
-char* convertRowToRaw(std::string row, size_t* out_len)
+char* convertRowToRaw(std::string row, int* out_len)
 {
+    std::vector<std::string> parts = split(row);
+
+    if (parts.at(0) == "<set>")
+    {
+        return convertSetIndicatorToRaw(parts, out_len);
+    }
+    else if (parts.at(0) == "<rem>")
+    {
+        return convertRemoveIndicatorToRaw(parts, out_len);
+    }
+
     return 0;
 }
 
+char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len)
+{
+    int commandID = 1;
+    int indicatorID = std::stoi(splittedRow.at(1));
+    double latitude = std::stod(splittedRow.at(3));
+    double longitude = std::stod(splittedRow.at(4));
+    double height = std::stod(splittedRow.at(5));
+    double roll = std::stod(splittedRow.at(6));
+    double pitch = std::stod(splittedRow.at(7));
+    double yaw = std::stod(splittedRow.at(8));
+
+
+    *out_len = 64;
+    char* rawContent = new char[*out_len] {};
+    
+    memcpy(rawContent, &commandID, sizeof(commandID));
+    memcpy(rawContent + 4, &indicatorID, sizeof(indicatorID));
+    memcpy(rawContent + 16, &latitude, sizeof(latitude));
+    memcpy(rawContent + 24, &longitude, sizeof(longitude));
+    memcpy(rawContent + 32, &height, sizeof(height));
+    memcpy(rawContent + 40, &roll, sizeof(roll));
+    memcpy(rawContent + 48, &pitch, sizeof(pitch));
+    memcpy(rawContent + 56, &yaw, sizeof(yaw));
+
+    return rawContent;
+}
+
+
+char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len)
+{
+    int commandID = 2;
+
+    *out_len = sizeof(int) * (splittedRow.size() - 1);
+    
+    char rawContent[1024];
+
+
+    memcpy(rawContent, &commandID, sizeof(commandID));
+
+    return rawContent;
+}
+
+
 std::vector<std::string> split(const std::string& s)
-    {
-            char delimiter = ';';
+{
     std::vector<std::string> tokens;
     std::stringstream ss(s);
-    std::string item;
+    std::string part;
 
-    while (std::getline(ss, item, delimiter)) {
-        tokens.push_back(item);
+    while (std::getline(ss, part, SOURCE_FILE_DELIMITER)) {
+        tokens.push_back(part);
     }
 
     return tokens;

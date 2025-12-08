@@ -54,16 +54,15 @@ void SetIndicatorCommandConfiguration::setYaw(f64 yaw)
 
 void SetIndicatorCommandConfiguration::setFromByteArray(char* array, u32 length)
 {
+    this->indicator = Indicator::parse(array + 8, length - 8);
+
     memcpy(&id, array + 4, sizeof(u32));
-
-    // TODO Indicator...
-
     memcpy(&latitude, array + 16, sizeof(f64));
     memcpy(&longitude, array + 24, sizeof(f64));
     memcpy(&height, array + 32, sizeof(f64));
     memcpy(&roll, array + 40, sizeof(f64));
     memcpy(&pitch, array + 48, sizeof(f64));
-    memcpy(&yaw, array + 54, sizeof(f64));
+    memcpy(&yaw, array + 56, sizeof(f64));
 }
 
 u32 SetIndicatorCommandConfiguration::getID()
