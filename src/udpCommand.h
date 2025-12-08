@@ -31,7 +31,7 @@ public:
     void setPitch(f64 pitch);
     void setYaw(f64 yaw);
 
-    void setFromByteArray(char* array, u32 length);
+    bool setFromByteArray(char* array, u32 length);
 
     u32 getID();
     Indicator getIndicator();
@@ -52,6 +52,8 @@ private:
     f64 roll;
     f64 pitch;
     f64 yaw;
+
+    bool validate();
 };
 
 class RemoveIndicatorsCommandConfiguration : public UDPCommandConfiguration
@@ -68,4 +70,6 @@ public:
 
 private:
     std::vector<int> idsToRemove;
+
+    bool validate();
 };
