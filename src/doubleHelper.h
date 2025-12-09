@@ -8,17 +8,9 @@ bool areDoubleEqual(double a, double b) {
     return fabs(a - b) < DOUBLE_PRECISION;
 }
 
-bool isDoubleEqualOrMore(double a, double b) {
-    if(!areDoubleEqual(a, b))
-    {
-        double diff = b - a;
-        return fabs(diff) >= DOUBLE_PRECISION;
-    }
-
-    return true;
-}
-
 bool isDoubleInRange(double value, double min, double max)
 {
-    return isDoubleEqualOrMore(value, min) && isDoubleEqualOrMore(max, value);
+    if (min > max) std::swap(min, max);
+
+    return !(value < min - DOUBLE_PRECISION || value > max + DOUBLE_PRECISION);
 }
