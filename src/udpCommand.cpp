@@ -4,6 +4,8 @@
 #include "log.h"
 #include "doubleHelper.h"
 
+#include <string>
+
 #define LATITUDE_MIN -90.0
 #define LATITUDE_MAX 90.0
 
@@ -22,14 +24,29 @@
 #define YAW_MIN 0.0
 #define YAW_MAX 360.0
 
-SetIndicatorCommandConfiguration::SetIndicatorCommandConfiguration() {
-    this->id = 0;
-    this->latitude = 0;
-    this->longitude = 0;
-    this->height = 0;
-    this->roll = 0;
-    this->pitch = 0;
-    this->yaw = 0;
+//////////////
+///   SET  ///
+//////////////
+SetIndicatorCommandConfiguration* SetIndicatorCommandConfiguration::parse(char* array, u32 length)
+{
+    SetIndicatorCommandConfiguration command;
+    command.indicator = Indicator::parse(array + 8, length - 8);
+
+    memcpy(&command.id, array + 4, sizeof(u32));
+    memcpy(&command.latitude, array + 16, sizeof(f64));
+    memcpy(&command.longitude, array + 24, sizeof(f64));
+    memcpy(&command.height, array + 32, sizeof(f64));
+    memcpy(&command.roll, array + 40, sizeof(f64));
+    memcpy(&command.pitch, array + 48, sizeof(f64));
+    memcpy(&command.yaw, array + 56, sizeof(f64));
+    if (command.validate())
+    {
+    return &command;
+    }
+    else {
+        return NULL;
+    }
+
 }
 
 void SetIndicatorCommandConfiguration::setID(u32 id)
@@ -70,21 +87,6 @@ void SetIndicatorCommandConfiguration::setPitch(f64 pitch)
 void SetIndicatorCommandConfiguration::setYaw(f64 yaw)
 {
     this->yaw = yaw;
-}
-
-bool SetIndicatorCommandConfiguration::setFromByteArray(char* array, u32 length)
-{
-    this->indicator = Indicator::parse(array + 8, length - 8);
-
-    memcpy(&id, array + 4, sizeof(u32));
-    memcpy(&latitude, array + 16, sizeof(f64));
-    memcpy(&longitude, array + 24, sizeof(f64));
-    memcpy(&height, array + 32, sizeof(f64));
-    memcpy(&roll, array + 40, sizeof(f64));
-    memcpy(&pitch, array + 48, sizeof(f64));
-    memcpy(&yaw, array + 56, sizeof(f64));
-
-    return validate();
 }
 
 bool SetIndicatorCommandConfiguration::validate()
@@ -170,9 +172,23 @@ f64 SetIndicatorCommandConfiguration::getYaw()
     return this->yaw;
 }
 
-RemoveIndicatorsCommandConfiguration::RemoveIndicatorsCommandConfiguration()
+std::string SetIndicatorCommandConfiguration::toString()
 {
-    // empty
+    return "Set Indicator: Indicator <unknown> Lat: " + std::to_string(latitude) + ", Long: " + std::to_string(longitude) +
+        ", Height: " + std::to_string(height) + ", Roll: " + std::to_string(roll) + ", Pitch: " + std::to_string(pitch) +
+        ", Yaw: " + std::to_string(yaw);
+}
+
+//////////////
+/// REMOVE ///
+//////////////
+RemoveIndicatorsCommandConfiguration* RemoveIndicatorsCommandConfiguration::parse(char* array, u32 length)
+{
+    RemoveIndicatorsCommandConfiguration command;
+
+    // TODO Parse
+
+    return &command;
 }
 
 void RemoveIndicatorsCommandConfiguration::addIDToRemove(u32 id)
@@ -190,4 +206,9 @@ bool RemoveIndicatorsCommandConfiguration::validate()
     bool isValid = true;
 
     return isValid;
+}
+
+std::string RemoveIndicatorsCommandConfiguration::toString()
+{
+    return "";
 }

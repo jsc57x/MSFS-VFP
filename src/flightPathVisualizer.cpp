@@ -15,6 +15,10 @@ void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targe
 void FlightPathVisualizer::handleMessage(char* message, u32 length)
 {
     UDPCommandConfiguration* command = parseIncomingMessage(message, length);
+    if (command != NULL)
+    {
+        Logger::logInfo(command->toString());
+    }
 }
 
 UDPCommandConfiguration* FlightPathVisualizer::parseIncomingMessage(char* messageContent, u32 length)
@@ -51,15 +55,16 @@ SetIndicatorCommandConfiguration* FlightPathVisualizer::parseSetCommand(char* me
     {
         handleInvalidMessage("Invalid message length for Set command", message, length);
     }
-    SetIndicatorCommandConfiguration command;
-    command.setFromByteArray(message, length);
+    SetIndicatorCommandConfiguration* command = SetIndicatorCommandConfiguration::parse(message, length);
 
-    return &command;
+    return command;
 }
 
 RemoveIndicatorsCommandConfiguration* FlightPathVisualizer::parseRemoveCommand(char* message, u32 length)
 {
-    return NULL;
+    RemoveIndicatorsCommandConfiguration* command = RemoveIndicatorsCommandConfiguration::parse(message, length);
+
+    return command;
 }
 
 void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* message, u32 length)

@@ -56,7 +56,6 @@ int udpPort = DEFAULT_SEND_UDP_PORT;
             processFile(udpPort, filePath);
         }
     }
-    // TODO Raw-Parameter?
     else if (argc == 4)
     {
         if (strcmp(argv[1], "-p") != 0)

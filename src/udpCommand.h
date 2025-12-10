@@ -10,13 +10,14 @@ enum UDPCommand { SET, REMOVE };
 class UDPCommandConfiguration {
 public:
     virtual UDPCommand getCommand() = 0;
+    virtual std::string toString() = 0;
     virtual ~UDPCommandConfiguration() = default;
 };
 
 class SetIndicatorCommandConfiguration : public UDPCommandConfiguration
 {
 public:
-    SetIndicatorCommandConfiguration();
+    static SetIndicatorCommandConfiguration* parse(char* array, u32 length);
 
     UDPCommand getCommand() override {
         return UDPCommand::SET;
@@ -31,8 +32,6 @@ public:
     void setPitch(f64 pitch);
     void setYaw(f64 yaw);
 
-    bool setFromByteArray(char* array, u32 length);
-
     u32 getID();
     Indicator getIndicator();
          
@@ -42,6 +41,8 @@ public:
     f64 getRoll();
     f64 getPitch();
     f64 getYaw();
+
+    std::string toString() override;
 
 private:
     u32 id;
@@ -59,7 +60,7 @@ private:
 class RemoveIndicatorsCommandConfiguration : public UDPCommandConfiguration
 {
 public:
-    RemoveIndicatorsCommandConfiguration();
+    static RemoveIndicatorsCommandConfiguration* parse(char* array, u32 length);
 
     UDPCommand getCommand() override {
         return UDPCommand::REMOVE;
@@ -67,6 +68,8 @@ public:
 
     void addIDToRemove(u32 id);
     std::vector<int> getIDsToRemove();
+
+    std::string toString() override;
 
 private:
     std::vector<int> idsToRemove;

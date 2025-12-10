@@ -91,11 +91,6 @@ void UDPServer::handleSocket(UDPMessageCallback* callback)
             break;
         }
 
-        
-        // TODO Debug-Output entfernen
-        printf("Empfangen: %s\n",
-            buffer);
-
         callback->handleMessage(buffer, recvLen);
     }
 }
