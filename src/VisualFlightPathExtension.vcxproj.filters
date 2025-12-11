@@ -33,6 +33,9 @@
     <ClCompile Include="indicator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="simConnectProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flightPathVisualizer.h">
