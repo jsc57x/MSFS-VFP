@@ -34,7 +34,28 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
         return;
     }
 
+    if (command->getCommand() == UDPCommand::SET)
+    {
+        SetIndicatorCommandConfiguration* setCommand = static_cast<SetIndicatorCommandConfiguration*>(command);
+        SIMCONNECT_DATA_INITPOSITION pos;
+        pos.Latitude = setCommand->getLatitude();
+        pos.Longitude = setCommand->getLongitude();
+        pos.Altitude = setCommand->getHeight();
+        pos.Heading = setCommand->getPitch(); // FIXME Anpassen der Werte 
+        pos.Bank = setCommand->getRoll();
+        pos.Pitch = setCommand->getYaw();
+        pos.Airspeed = 0;
+        pos.OnGround = 0;
+
+        SimConnect_AICreateSimulatedObject_EX1(hSimConnect, "VFP_Circle_S", nullptr, pos, 1);
+    }
+    else if (command->getCommand() == UDPCommand::REMOVE)
+    {
     // TODO implement
+    }
+    else {
+        Logger::logError("Unknown command.");
+    }
 }
 
 bool SimConnectProxy::isConnectionOpen()
@@ -44,10 +65,7 @@ bool SimConnectProxy::isConnectionOpen()
 
 bool SimConnectProxy::isSimulationActive()
 {
-    const char* szState = 0;
-    SimConnect_RequestSystemState(this->hSimConnect, 0, szState);
-
-    return false;
+    return simulationIsRunning;
 }
 
 void SimConnectProxy::disconnect()

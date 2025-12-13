@@ -21,8 +21,8 @@ private:
     UDPServer* udpServer;
     SimConnectProxy* simConnectProxy;
 
-    UDPCommandConfiguration* parseIncomingMessage(char* array, u32 length);
-    SetIndicatorCommandConfiguration* parseSetCommand(char* array, u32 length);
-    RemoveIndicatorsCommandConfiguration* parseRemoveCommand(char* array, u32 length);
+    std::unique_ptr<UDPCommandConfiguration> parseIncomingMessage(char* array, u32 length);
+    std::unique_ptr<SetIndicatorCommandConfiguration> parseSetCommand(char* array, u32 length);
+    std::unique_ptr<RemoveIndicatorsCommandConfiguration> parseRemoveCommand(char* array, u32 length);
 };
 

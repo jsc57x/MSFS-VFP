@@ -1,9 +1,11 @@
-#include <string>
-#include <iostream>
 #include "datatypes.h"
 #include "flightPathVisualizer.h"
 #include "log.h"
 #include "udpCommand.h"
+
+#include <string>
+#include <iostream>
+#include <memory>
 
 void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targetPort)
 {
@@ -16,17 +18,18 @@ void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targe
 
 void FlightPathVisualizer::handleMessage(char* message, u32 length)
 {
-    UDPCommandConfiguration* command = parseIncomingMessage(message, length);
-    if (command == NULL)
-    {
-        return;
-    }
+    std::unique_ptr<UDPCommandConfiguration> command = parseIncomingMessage(message, length);
 
-    Logger::logInfo(command->toString());
-    simConnectProxy->handleCommand(command);
+    // make sure command was parsed and is not null
+    if (command == NULL) return;
+
+    UDPCommandConfiguration* commandConfig = command.get();
+
+    Logger::logInfo(commandConfig->toString());
+    simConnectProxy->handleCommand(commandConfig);
 }
 
-UDPCommandConfiguration* FlightPathVisualizer::parseIncomingMessage(char* messageContent, u32 length)
+std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, u32 length)
 {
     if (length < sizeof(u32))
     {
@@ -54,22 +57,18 @@ UDPCommandConfiguration* FlightPathVisualizer::parseIncomingMessage(char* messag
     return NULL;
 }
 
-SetIndicatorCommandConfiguration* FlightPathVisualizer::parseSetCommand(char* message, u32 length)
+std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSetCommand(char* message, u32 length)
 {
     if (length != 64)
     {
         handleInvalidMessage("Invalid message length for Set command", message, length);
     }
-    SetIndicatorCommandConfiguration* command = SetIndicatorCommandConfiguration::parse(message, length);
-
-    return command;
+    return SetIndicatorCommandConfiguration::parse(message, length);
 }
 
-RemoveIndicatorsCommandConfiguration* FlightPathVisualizer::parseRemoveCommand(char* message, u32 length)
+std::unique_ptr<RemoveIndicatorsCommandConfiguration> FlightPathVisualizer::parseRemoveCommand(char* message, u32 length)
 {
-    RemoveIndicatorsCommandConfiguration* command = RemoveIndicatorsCommandConfiguration::parse(message, length);
-
-    return command;
+    return RemoveIndicatorsCommandConfiguration::parse(message, length);
 }
 
 void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* message, u32 length)

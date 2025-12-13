@@ -5,6 +5,7 @@
 #include "doubleHelper.h"
 
 #include <string>
+#include <memory>
 
 #define LATITUDE_MIN -90.0
 #define LATITUDE_MAX 90.0
@@ -27,7 +28,7 @@
 //////////////
 ///   SET  ///
 //////////////
-SetIndicatorCommandConfiguration* SetIndicatorCommandConfiguration::parse(char* array, u32 length)
+std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfiguration::parse(char* array, u32 length)
 {
     SetIndicatorCommandConfiguration command;
     command.indicator = Indicator::parse(array + 8, length - 8);
@@ -41,10 +42,10 @@ SetIndicatorCommandConfiguration* SetIndicatorCommandConfiguration::parse(char* 
     memcpy(&command.yaw, array + 56, sizeof(f64));
     if (command.validate())
     {
-    return &command;
+    return std::make_unique<SetIndicatorCommandConfiguration>(command);
     }
     else {
-        return NULL;
+        return nullptr;
     }
 
 }
@@ -182,13 +183,14 @@ std::string SetIndicatorCommandConfiguration::toString()
 //////////////
 /// REMOVE ///
 //////////////
-RemoveIndicatorsCommandConfiguration* RemoveIndicatorsCommandConfiguration::parse(char* array, u32 length)
+std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandConfiguration::parse(char* array, u32 length)
 {
     RemoveIndicatorsCommandConfiguration command;
 
     // TODO Parse
 
-    return &command;
+    return std::make_unique<RemoveIndicatorsCommandConfiguration>(command);
+    ;
 }
 
 void RemoveIndicatorsCommandConfiguration::addIDToRemove(u32 id)

@@ -21,6 +21,9 @@ public:
 private:
     SimConnectCallback* callback;
     HANDLE hSimConnect = NULL;
+    
+    //FIXME: Value will be set (and maybe requested) with the plane information (via message dispatch)
+    bool simulationIsRunning = true;
 
     int connect();
     bool isConnectionOpen();

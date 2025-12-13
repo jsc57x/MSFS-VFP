@@ -4,6 +4,7 @@
 #include "indicator.h"
 #include <string>
 #include <vector>
+#include <memory>
 
 enum UDPCommand { SET, REMOVE };
 
@@ -17,7 +18,7 @@ public:
 class SetIndicatorCommandConfiguration : public UDPCommandConfiguration
 {
 public:
-    static SetIndicatorCommandConfiguration* parse(char* array, u32 length);
+    static std::unique_ptr<SetIndicatorCommandConfiguration> parse(char* array, u32 length);
 
     UDPCommand getCommand() override {
         return UDPCommand::SET;
@@ -60,7 +61,7 @@ private:
 class RemoveIndicatorsCommandConfiguration : public UDPCommandConfiguration
 {
 public:
-    static RemoveIndicatorsCommandConfiguration* parse(char* array, u32 length);
+    static std::unique_ptr<RemoveIndicatorsCommandConfiguration> parse(char* array, u32 length);
 
     UDPCommand getCommand() override {
         return UDPCommand::REMOVE;
