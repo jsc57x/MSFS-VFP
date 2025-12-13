@@ -135,7 +135,7 @@ f64 SetIndicatorCommandConfiguration::getPitch()
 
 std::string SetIndicatorCommandConfiguration::toString()
 {
-    return "Set Indicator: Indicator <unknown> Lat: " + std::to_string(latitude) + ", Long: " + std::to_string(longitude) +
+    return "Set Indicator: Indicator " + std::to_string(id) + " of type " + std::to_string(indicatorTypeID) + " Lat: " + std::to_string(latitude) + ", Long: " + std::to_string(longitude) +
         ", Height: " + std::to_string(altitude) + ", Roll: " + std::to_string(heading) + ", Pitch: " + std::to_string(bank) +
         ", Yaw: " + std::to_string(pitch);
 }
