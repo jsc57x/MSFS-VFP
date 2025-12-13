@@ -190,6 +190,7 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
 {
     int commandID = 1;
     int indicatorID = std::stoi(splittedRow.at(1));
+    long indicatorTypeID = std::stol(splittedRow.at(2));
     double latitude = std::stod(splittedRow.at(3));
     double longitude = std::stod(splittedRow.at(4));
     double height = std::stod(splittedRow.at(5));
@@ -203,6 +204,7 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
     
     memcpy(rawContent, &commandID, sizeof(commandID));
     memcpy(rawContent + 4, &indicatorID, sizeof(indicatorID));
+    memcpy(rawContent + 8, &indicatorTypeID, sizeof(indicatorTypeID));
     memcpy(rawContent + 16, &latitude, sizeof(latitude));
     memcpy(rawContent + 24, &longitude, sizeof(longitude));
     memcpy(rawContent + 32, &height, sizeof(height));

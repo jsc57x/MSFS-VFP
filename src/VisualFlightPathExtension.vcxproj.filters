@@ -62,9 +62,6 @@
     <ClInclude Include="udpCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="indicator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="doubleHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>

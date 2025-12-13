@@ -31,9 +31,9 @@
 std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfiguration::parse(char* array, u32 length)
 {
     SetIndicatorCommandConfiguration command;
-    command.indicator = Indicator::parse(array + 8, length - 8);
 
     memcpy(&command.id, array + 4, sizeof(u32));
+    memcpy(&command.indicatorTypeID, array + 8, sizeof(u32));
     memcpy(&command.latitude, array + 16, sizeof(f64));
     memcpy(&command.longitude, array + 24, sizeof(f64));
     memcpy(&command.height, array + 32, sizeof(f64));
@@ -55,9 +55,9 @@ void SetIndicatorCommandConfiguration::setID(u32 id)
     this->id = id;
 }
 
-void SetIndicatorCommandConfiguration::setIndicator(Indicator indicator)
+void SetIndicatorCommandConfiguration::setIndicator(u64 indicatorTypeID)
 {
-    this->indicator = indicator;
+    this->indicatorTypeID = indicatorTypeID;
 }
 
 void SetIndicatorCommandConfiguration::setLatitude(f64 latitude)
@@ -138,9 +138,9 @@ u32 SetIndicatorCommandConfiguration::getID()
     return this->id;
 }
 
-Indicator SetIndicatorCommandConfiguration::getIndicator()
+u64 SetIndicatorCommandConfiguration::getIndicatorTypeID()
 {
-    return this->indicator;
+    return this->indicatorTypeID;
 }
 
 f64 SetIndicatorCommandConfiguration::getLatitude()

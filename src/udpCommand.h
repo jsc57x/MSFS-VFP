@@ -1,7 +1,6 @@
 #pragma once
 
 #include "datatypes.h"
-#include "indicator.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -24,7 +23,7 @@ public:
         return UDPCommand::SET;
     }
     void setID(u32 id);
-    void setIndicator(Indicator indicator);
+    void setIndicator(u64 indicatorTypeID);
 
     void setLatitude(f64 latitude);
     void setLongitude(f64 longitude);
@@ -34,7 +33,7 @@ public:
     void setYaw(f64 yaw);
 
     u32 getID();
-    Indicator getIndicator();
+    u64 getIndicatorTypeID();
          
     f64 getLatitude();
     f64 getLongitude();
@@ -47,7 +46,7 @@ public:
 
 private:
     u32 id;
-    Indicator indicator;
+    u64 indicatorTypeID;
     f64 latitude;
     f64 longitude;
     f64 height;
