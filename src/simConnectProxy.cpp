@@ -40,10 +40,10 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
         SIMCONNECT_DATA_INITPOSITION pos;
         pos.Latitude = setCommand->getLatitude();
         pos.Longitude = setCommand->getLongitude();
-        pos.Altitude = setCommand->getHeight();
-        pos.Heading = setCommand->getPitch(); // FIXME Anpassen der Werte 
-        pos.Bank = setCommand->getRoll();
-        pos.Pitch = setCommand->getYaw();
+        pos.Altitude = setCommand->getAltitude();
+        pos.Heading = setCommand->getHeading();
+        pos.Bank = setCommand->getBank();
+        pos.Pitch = setCommand->getPitch();
         pos.Airspeed = 0;
         pos.OnGround = 0;
 

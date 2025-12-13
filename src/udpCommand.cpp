@@ -13,17 +13,17 @@
 #define LONGITUDE_MIN -180.0
 #define LONGITUDE_MAX 180.0
 
-#define HEIGHT_MIN 0.0
-#define HEIGHT_MAX 1000000 // TODO What is max height???
+#define ALTITUDE_MIN 0.0
+#define ALTITUDE_MAX 1000000 // TODO What is max height???
 
-#define ROLL_MIN 0.0
-#define ROLL_MAX 360.0
+#define HEADING_MIN 0.0
+#define HEADING_MAX 360.0
+
+#define BANK_MIN 0.0
+#define BANK_MAX 360.0
 
 #define PITCH_MIN 0.0
 #define PITCH_MAX 360.0
-
-#define YAW_MIN 0.0
-#define YAW_MAX 360.0
 
 //////////////
 ///   SET  ///
@@ -36,10 +36,10 @@ std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfigurati
     memcpy(&command.indicatorTypeID, array + 8, sizeof(u32));
     memcpy(&command.latitude, array + 16, sizeof(f64));
     memcpy(&command.longitude, array + 24, sizeof(f64));
-    memcpy(&command.height, array + 32, sizeof(f64));
-    memcpy(&command.roll, array + 40, sizeof(f64));
-    memcpy(&command.pitch, array + 48, sizeof(f64));
-    memcpy(&command.yaw, array + 56, sizeof(f64));
+    memcpy(&command.altitude, array + 32, sizeof(f64));
+    memcpy(&command.heading, array + 40, sizeof(f64));
+    memcpy(&command.bank, array + 48, sizeof(f64));
+    memcpy(&command.pitch, array + 56, sizeof(f64));
     if (command.validate())
     {
     return std::make_unique<SetIndicatorCommandConfiguration>(command);
@@ -48,46 +48,6 @@ std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfigurati
         return nullptr;
     }
 
-}
-
-void SetIndicatorCommandConfiguration::setID(u32 id)
-{
-    this->id = id;
-}
-
-void SetIndicatorCommandConfiguration::setIndicator(u64 indicatorTypeID)
-{
-    this->indicatorTypeID = indicatorTypeID;
-}
-
-void SetIndicatorCommandConfiguration::setLatitude(f64 latitude)
-{
-    this->latitude = latitude;
-}
-
-void SetIndicatorCommandConfiguration::setLongitude(f64 longitude)
-{
-    this->longitude = longitude;
-}
-
-void SetIndicatorCommandConfiguration::setHeight(f64 height)
-{
-    this->height = height;
-}
-
-void SetIndicatorCommandConfiguration::setRoll(f64 roll)
-{
-    this->roll = roll;
-}
-
-void SetIndicatorCommandConfiguration::setPitch(f64 pitch)
-{
-    this->pitch = pitch;
-}
-
-void SetIndicatorCommandConfiguration::setYaw(f64 yaw)
-{
-    this->yaw = yaw;
 }
 
 bool SetIndicatorCommandConfiguration::validate()
@@ -106,27 +66,27 @@ bool SetIndicatorCommandConfiguration::validate()
         isValid = false;
     }
 
-    if (isValid && !isDoubleInRange(height, HEIGHT_MIN, HEIGHT_MAX))
+    if (isValid && !isDoubleInRange(altitude, ALTITUDE_MIN, ALTITUDE_MAX))
     {
-        Logger::logError("Height is out of range: " + std::to_string(height));
+        Logger::logError("Altitude is out of range: " + std::to_string(altitude));
         isValid = false;
     }
 
-    if (isValid && !isDoubleInRange(roll, ROLL_MIN, ROLL_MAX))
+    if (isValid && !isDoubleInRange(heading, HEADING_MIN, HEADING_MAX))
     {
-        Logger::logError("Roll is out of range: " + std::to_string(roll));
+        Logger::logError("Heading is out of range: " + std::to_string(heading));
+        isValid = false;
+    }
+
+    if (isValid && !isDoubleInRange(bank, BANK_MIN, BANK_MAX))
+    {
+        Logger::logError("Bank is out of range: " + std::to_string(bank));
         isValid = false;
     }
 
     if (isValid && !isDoubleInRange(pitch, PITCH_MIN, PITCH_MAX))
     {
         Logger::logError("Pitch is out of range: " + std::to_string(pitch));
-        isValid = false;
-    }
-
-    if (isValid && !isDoubleInRange(yaw, YAW_MIN, YAW_MAX))
-    {
-        Logger::logError("Yaw is out of range: " + std::to_string(yaw));
         isValid = false;
     }    
 
@@ -153,14 +113,19 @@ f64 SetIndicatorCommandConfiguration::getLongitude()
     return this->longitude;
 }
 
-f64 SetIndicatorCommandConfiguration::getHeight()
+f64 SetIndicatorCommandConfiguration::getAltitude()
 {
-    return this->height;
+    return this->altitude;
 }
 
-f64 SetIndicatorCommandConfiguration::getRoll()
+f64 SetIndicatorCommandConfiguration::getHeading()
 {
-    return this->roll;
+    return this->heading;
+}
+
+f64 SetIndicatorCommandConfiguration::getBank()
+{
+    return this->bank;
 }
 
 f64 SetIndicatorCommandConfiguration::getPitch()
@@ -168,16 +133,11 @@ f64 SetIndicatorCommandConfiguration::getPitch()
     return this->pitch;
 }
 
-f64 SetIndicatorCommandConfiguration::getYaw()
-{
-    return this->yaw;
-}
-
 std::string SetIndicatorCommandConfiguration::toString()
 {
     return "Set Indicator: Indicator <unknown> Lat: " + std::to_string(latitude) + ", Long: " + std::to_string(longitude) +
-        ", Height: " + std::to_string(height) + ", Roll: " + std::to_string(roll) + ", Pitch: " + std::to_string(pitch) +
-        ", Yaw: " + std::to_string(yaw);
+        ", Height: " + std::to_string(altitude) + ", Roll: " + std::to_string(heading) + ", Pitch: " + std::to_string(bank) +
+        ", Yaw: " + std::to_string(pitch);
 }
 
 //////////////

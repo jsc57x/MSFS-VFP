@@ -22,25 +22,16 @@ public:
     UDPCommand getCommand() override {
         return UDPCommand::SET;
     }
-    void setID(u32 id);
-    void setIndicator(u64 indicatorTypeID);
-
-    void setLatitude(f64 latitude);
-    void setLongitude(f64 longitude);
-    void setHeight(f64 height);
-    void setRoll(f64 roll);
-    void setPitch(f64 pitch);
-    void setYaw(f64 yaw);
 
     u32 getID();
     u64 getIndicatorTypeID();
          
     f64 getLatitude();
     f64 getLongitude();
-    f64 getHeight();
-    f64 getRoll();
+    f64 getAltitude();
+    f64 getHeading();
+    f64 getBank();
     f64 getPitch();
-    f64 getYaw();
 
     std::string toString() override;
 
@@ -49,10 +40,10 @@ private:
     u64 indicatorTypeID;
     f64 latitude;
     f64 longitude;
-    f64 height;
-    f64 roll;
+    f64 altitude;
+    f64 heading;
+    f64 bank;
     f64 pitch;
-    f64 yaw;
 
     bool validate();
 };

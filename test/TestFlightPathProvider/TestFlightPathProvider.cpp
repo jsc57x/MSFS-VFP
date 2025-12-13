@@ -193,10 +193,10 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
     long indicatorTypeID = std::stol(splittedRow.at(2));
     double latitude = std::stod(splittedRow.at(3));
     double longitude = std::stod(splittedRow.at(4));
-    double height = std::stod(splittedRow.at(5));
-    double roll = std::stod(splittedRow.at(6));
-    double pitch = std::stod(splittedRow.at(7));
-    double yaw = std::stod(splittedRow.at(8));
+    double altitude = std::stod(splittedRow.at(5));
+    double heading = std::stod(splittedRow.at(6));
+    double bank = std::stod(splittedRow.at(7));
+    double pitch = std::stod(splittedRow.at(8));
 
 
     *out_len = 64;
@@ -207,10 +207,10 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
     memcpy(rawContent + 8, &indicatorTypeID, sizeof(indicatorTypeID));
     memcpy(rawContent + 16, &latitude, sizeof(latitude));
     memcpy(rawContent + 24, &longitude, sizeof(longitude));
-    memcpy(rawContent + 32, &height, sizeof(height));
-    memcpy(rawContent + 40, &roll, sizeof(roll));
-    memcpy(rawContent + 48, &pitch, sizeof(pitch));
-    memcpy(rawContent + 56, &yaw, sizeof(yaw));
+    memcpy(rawContent + 32, &altitude, sizeof(altitude));
+    memcpy(rawContent + 40, &heading, sizeof(heading));
+    memcpy(rawContent + 48, &bank, sizeof(bank));
+    memcpy(rawContent + 56, &pitch, sizeof(pitch));
 
     return rawContent;
 }
