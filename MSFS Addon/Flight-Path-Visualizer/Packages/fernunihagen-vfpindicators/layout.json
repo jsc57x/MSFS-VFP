@@ -1,0 +1,34 @@
+{
+  "content": [
+    {
+      "path": "contentinfo/fernunihagen-vfpindicators/thumbnail.jpg",
+      "size": 5446,
+      "date": 134044190450000000
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/model.cfg",
+      "size": 28,
+      "date": 134100896460000000
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/tube001.bin",
+      "size": 13536,
+      "date": 134100409820262163
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/tube001.gltf",
+      "size": 2246,
+      "date": 134100409820262163
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/tube001.xml",
+      "size": 176,
+      "date": 134100409830000003
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/sim.cfg",
+      "size": 179,
+      "date": 134100896460000000
+    }
+  ]
+}

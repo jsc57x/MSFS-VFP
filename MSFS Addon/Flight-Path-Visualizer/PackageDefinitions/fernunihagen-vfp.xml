@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AssetPackage Version="0.1.0">
+	<ItemSettings>
+		<ContentType>MISC</ContentType>
+		<Title>Visual Flight Path Indicators</Title>
+		<Manufacturer/>
+		<Creator>Jens Scharmann</Creator>
+	</ItemSettings>
+	<Flags>
+		<VisibleInStore>false</VisibleInStore>
+		<CanBeReferenced>false</CanBeReferenced>
+	</Flags>
+	<PackageOrderHint>CUSTOM_SIMOBJECTS</PackageOrderHint>
+	<AssetGroups>
+		<AssetGroup Name="ContentInfo">
+			<Type Version="0">ContentInfo</Type>
+			<Flags>
+				<FSXCompatibility>false</FSXCompatibility>
+			</Flags>
+			<AssetDir>PackageDefinitions\fernunihagen-vfp\ContentInfo\</AssetDir>
+			<OutputDir>ContentInfo\fernunihagen-vfp\</OutputDir>
+		</AssetGroup>
+		<AssetGroup Name="simobjects">
+			<Type Version="1">SimObject</Type>
+			<Flags>
+				<FSXCompatibility>false</FSXCompatibility>
+			</Flags>
+			<AssetDir>PackageSources\SimObjects\</AssetDir>
+			<OutputDir>SimObjects\Misc\VFP_Indicators\</OutputDir>
+		</AssetGroup>
+	</AssetGroups>
+</AssetPackage>
+

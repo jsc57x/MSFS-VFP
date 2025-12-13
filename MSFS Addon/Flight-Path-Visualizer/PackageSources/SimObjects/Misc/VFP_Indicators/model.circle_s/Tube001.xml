@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelInfo guid="{5d0fd2de-5c21-4d52-a41f-99048202a122}" version="1.1">
+	<LODS>
+		<LOD ModelFile="Tube001.gltf"/>
+	</LODS>
+</ModelInfo>

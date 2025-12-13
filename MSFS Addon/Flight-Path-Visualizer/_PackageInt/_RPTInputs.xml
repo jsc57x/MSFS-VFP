@@ -1,0 +1,33 @@
+<RPTInputs>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageDefinitions\fernunihagen-vfpindicators\ContentInfo\Thumbnail.jpg">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="ContentInfo"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Tube001.gltf">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Tube001.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\sim.cfg">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Tube001.bin">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\model.CFG">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+</RPTInputs>
+
