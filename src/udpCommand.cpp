@@ -28,18 +28,18 @@
 //////////////
 ///   SET  ///
 //////////////
-std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfiguration::parse(char* array, u32 length)
+std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfiguration::parse(char* array)
 {
     SetIndicatorCommandConfiguration command;
 
-    memcpy(&command.id, array + 4, sizeof(u32));
-    memcpy(&command.indicatorTypeID, array + 8, sizeof(u32));
-    memcpy(&command.latitude, array + 16, sizeof(f64));
-    memcpy(&command.longitude, array + 24, sizeof(f64));
-    memcpy(&command.altitude, array + 32, sizeof(f64));
-    memcpy(&command.heading, array + 40, sizeof(f64));
-    memcpy(&command.bank, array + 48, sizeof(f64));
-    memcpy(&command.pitch, array + 56, sizeof(f64));
+    memcpy(&command.id, array + 2, sizeof(u16));
+    memcpy(&command.indicatorTypeID, array + 4, sizeof(u32));
+    memcpy(&command.latitude, array + 8, sizeof(f64));
+    memcpy(&command.longitude, array + 16, sizeof(f64));
+    memcpy(&command.altitude, array + 24, sizeof(f64));
+    memcpy(&command.heading, array + 32, sizeof(f64));
+    memcpy(&command.bank, array + 40, sizeof(f64));
+    memcpy(&command.pitch, array + 48, sizeof(f64));
     if (command.validate())
     {
     return std::make_unique<SetIndicatorCommandConfiguration>(command);
@@ -93,12 +93,12 @@ bool SetIndicatorCommandConfiguration::validate()
     return isValid;
 }
 
-u32 SetIndicatorCommandConfiguration::getID()
+u16 SetIndicatorCommandConfiguration::getID()
 {
     return this->id;
 }
 
-u64 SetIndicatorCommandConfiguration::getIndicatorTypeID()
+u32 SetIndicatorCommandConfiguration::getIndicatorTypeID()
 {
     return this->indicatorTypeID;
 }
@@ -153,12 +153,12 @@ std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandCon
     ;
 }
 
-void RemoveIndicatorsCommandConfiguration::addIDToRemove(u32 id)
+void RemoveIndicatorsCommandConfiguration::addIDToRemove(u16 id)
 {
     this->idsToRemove.push_back(id);
 }
 
-std::vector<int> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
+std::vector<u16> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
 {
     return this->idsToRemove;
 }

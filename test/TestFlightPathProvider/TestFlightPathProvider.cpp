@@ -188,9 +188,9 @@ char* convertRowToRaw(std::string row, int* out_len)
 
 char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len)
 {
-    int commandID = 1;
-    int indicatorID = std::stoi(splittedRow.at(1));
-    long indicatorTypeID = std::stol(splittedRow.at(2));
+    short commandID = 1;
+    short indicatorID = static_cast<short>(std::stoi(splittedRow.at(1))); // not very clean but ok for test code
+    long indicatorTypeID = std::stoi(splittedRow.at(2));
     double latitude = std::stod(splittedRow.at(3));
     double longitude = std::stod(splittedRow.at(4));
     double altitude = std::stod(splittedRow.at(5));
@@ -199,18 +199,18 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
     double pitch = std::stod(splittedRow.at(8));
 
 
-    *out_len = 64;
+    *out_len = 56;
     char* rawContent = new char[*out_len] {};
     
     memcpy(rawContent, &commandID, sizeof(commandID));
-    memcpy(rawContent + 4, &indicatorID, sizeof(indicatorID));
-    memcpy(rawContent + 8, &indicatorTypeID, sizeof(indicatorTypeID));
-    memcpy(rawContent + 16, &latitude, sizeof(latitude));
-    memcpy(rawContent + 24, &longitude, sizeof(longitude));
-    memcpy(rawContent + 32, &altitude, sizeof(altitude));
-    memcpy(rawContent + 40, &heading, sizeof(heading));
-    memcpy(rawContent + 48, &bank, sizeof(bank));
-    memcpy(rawContent + 56, &pitch, sizeof(pitch));
+    memcpy(rawContent + 2, &indicatorID, sizeof(indicatorID));
+    memcpy(rawContent + 4, &indicatorTypeID, sizeof(indicatorTypeID));
+    memcpy(rawContent + 8, &latitude, sizeof(latitude));
+    memcpy(rawContent + 16, &longitude, sizeof(longitude));
+    memcpy(rawContent + 24, &altitude, sizeof(altitude));
+    memcpy(rawContent + 32, &heading, sizeof(heading));
+    memcpy(rawContent + 40, &bank, sizeof(bank));
+    memcpy(rawContent + 48, &pitch, sizeof(pitch));
 
     return rawContent;
 }

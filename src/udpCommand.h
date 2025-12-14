@@ -17,14 +17,14 @@ public:
 class SetIndicatorCommandConfiguration : public UDPCommandConfiguration
 {
 public:
-    static std::unique_ptr<SetIndicatorCommandConfiguration> parse(char* array, u32 length);
+    static std::unique_ptr<SetIndicatorCommandConfiguration> parse(char* array);
 
     UDPCommand getCommand() override {
         return UDPCommand::SET;
     }
 
-    u32 getID();
-    u64 getIndicatorTypeID();
+    u16 getID();
+    u32 getIndicatorTypeID();
          
     f64 getLatitude();
     f64 getLongitude();
@@ -36,8 +36,8 @@ public:
     std::string toString() override;
 
 private:
-    u32 id;
-    u64 indicatorTypeID;
+    u16 id;
+    u32 indicatorTypeID;
     f64 latitude;
     f64 longitude;
     f64 altitude;
@@ -57,13 +57,13 @@ public:
         return UDPCommand::REMOVE;
     }
 
-    void addIDToRemove(u32 id);
-    std::vector<int> getIDsToRemove();
+    void addIDToRemove(u16 id);
+    std::vector<u16> getIDsToRemove();
 
     std::string toString() override;
 
 private:
-    std::vector<int> idsToRemove;
+    std::vector<u16> idsToRemove;
 
     bool validate();
 };

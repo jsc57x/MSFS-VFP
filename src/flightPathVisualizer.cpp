@@ -31,12 +31,12 @@ void FlightPathVisualizer::handleMessage(char* message, u32 length)
 
 std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, u32 length)
 {
-    if (length < sizeof(u32))
+    if (length < sizeof(u16))
     {
         handleInvalidMessage("missing command", messageContent, length);
     }
-    u32 commandID;
-    memcpy(&commandID, messageContent, sizeof(u32));
+    u16 commandID;
+    memcpy(&commandID, messageContent, sizeof(u16));
 
     // this has to be improved if there are more than two commands
     if (commandID != 1 && commandID != 2)
@@ -59,11 +59,11 @@ std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMess
 
 std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSetCommand(char* message, u32 length)
 {
-    if (length != 64)
+    if (length != 56)
     {
         handleInvalidMessage("Invalid message length for Set command", message, length);
     }
-    return SetIndicatorCommandConfiguration::parse(message, length);
+    return SetIndicatorCommandConfiguration::parse(message);
 }
 
 std::unique_ptr<RemoveIndicatorsCommandConfiguration> FlightPathVisualizer::parseRemoveCommand(char* message, u32 length)
