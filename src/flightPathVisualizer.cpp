@@ -10,10 +10,11 @@
 void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targetPort)
 {
     udpServer = new UDPServer();
-    int startUDPServRes = udpServer->startUDPServer(serverPort, this);
+    u32 startUDPServRes = udpServer->startUDPServer(serverPort, this);
     //TODO Result auswerten
 
-    simConnectProxy = new SimConnectProxy(this);
+    simConnectProxy = new SimConnectProxy();
+    simConnectProxy->startSimConnectProxy(this);
 }
 
 void FlightPathVisualizer::handleMessage(char* message, u32 length)
@@ -84,6 +85,6 @@ void FlightPathVisualizer::handlePlaneUpdate()
 void FlightPathVisualizer::shutdown()
 {
     udpServer->stopUDPServer();
-    simConnectProxy->disconnect();
+    simConnectProxy->stopSimConnectProxy();
 }
 

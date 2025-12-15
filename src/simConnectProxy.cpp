@@ -8,31 +8,35 @@
 #include <iostream>
 #include <fstream>
 
-SimConnectProxy::SimConnectProxy(SimConnectCallback* callback)
+bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
 {
     this->callback = callback;
-}
 
-int SimConnectProxy::connect()
-{
-    HRESULT hr;
-    hr = SimConnect_Open(&this->hSimConnect, "Visual Flight Path", NULL, 0, 0, SIMCONNECT_OPEN_CONFIGINDEX_LOCAL);
+    // as of dec 2025 there is a bug in SimConnect >= 1.4.5 (https://devsupport.flightsimulator.com/t/memory-leak-in-simconnect-open-function-sdk-1-4-5/17043)
+    
+    while (FAILED(SimConnect_Open(&this->hSimConnect, "Visual Flight Path", NULL, 0, 0, SIMCONNECT_OPEN_CONFIGINDEX_LOCAL)))
+    {
+        Sleep(10);
+    }
+
+    subscribeToEvents();
+
+    recvDataThread = std::thread(&SimConnectProxy::runSimConnectMessageLoop, this);
+
+    while (!connected.load(std::memory_order_acquire))
+        Sleep(10);
 
     return 0;
 }
 
+void SimConnectProxy::subscribeToEvents()
+{
+    SimConnect_SubscribeToSystemEvent(hSimConnect, EVT_SIM_START, "SimStart");
+    SimConnect_SubscribeToSystemEvent(hSimConnect, EVT_SIM_STOP, "SimStop");
+}
+
 void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
 {
-    // open connection lazy (and prevent problems wenn connection is closed unexpectedly)
-    if (!isConnectionOpen())
-    {
-        if (!SUCCEEDED(connect()))
-        {
-            Logger::logError("Command cannot be execute: Connection is closed.");
-            return;
-        }
-    }
-
     if (!isSimulationActive())
     {
         Logger::logError("Command cannot be execute: Simulation is not running.");
@@ -126,19 +130,64 @@ std::string SimConnectProxy::getIndicatorTypeName(u64 indicatorTypeID)
     return it->second; // return value
 }
 
-bool SimConnectProxy::isConnectionOpen()
-{
-    return this->hSimConnect != NULL;
-}
-
 bool SimConnectProxy::isSimulationActive()
 {
-    return simulationIsRunning;
+    return simulationIsActive.load(std::memory_order_acquire);
 }
 
-void SimConnectProxy::disconnect()
+void SimConnectProxy::stopSimConnectProxy()
 {
+    isRunning = false;
     SimConnect_Close(this->hSimConnect);
+}
+
+void SimConnectProxy::runSimConnectMessageLoop()
+{
+    isRunning = true;
+    while (isRunning)
+    {
+        SimConnect_CallDispatch(hSimConnect, SimConnectProxy::handleSimConnectMessage, this);
+        Sleep(1);
+    }
+}
+
+void CALLBACK SimConnectProxy::handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
+{
+    auto* self = static_cast<SimConnectProxy*>(pContext);
+    if (self) self->handleSimConnectMessageCore(pData, cbData);
+}
+
+void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD cbData)
+{
+    switch (pData->dwID)
+    {
+       case SIMCONNECT_RECV_ID_OPEN :
+       {
+           Logger::logInfo("SimConnect Client available");
+           connected.store(true, std::memory_order_release);
+           break;
+       } 
+       case SIMCONNECT_RECV_ID_EVENT :
+       {
+           SIMCONNECT_RECV_EVENT* evt = reinterpret_cast<SIMCONNECT_RECV_EVENT*>(pData);
+           switch (evt->uEventID)
+           {
+                case EVT_SIM_START:
+                {
+                    Logger::logInfo("Simulation started");
+                    simulationIsActive.store(true, std::memory_order_release);
+                    break;
+                }
+                case EVT_SIM_STOP:
+                {
+                    Logger::logInfo("Simulation stopped");
+                    simulationIsActive.store(false, std::memory_order_release);
+                    break;
+                }
+           }
+           break;
+       }
+    }
 }
 
 std::vector<std::string> SimConnectProxy::splitString(const std::string& s, char delimiter)

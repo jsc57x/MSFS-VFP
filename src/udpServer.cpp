@@ -9,7 +9,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-int UDPServer::startUDPServer(u16 udpPort, UDPMessageCallback* callback)
+u32 UDPServer::startUDPServer(u16 udpPort, UDPMessageCallback* callback)
 {
     sock = openUDPServerSocket(udpPort);
     serverThread = std::thread(&UDPServer::handleSocket, this, callback);
