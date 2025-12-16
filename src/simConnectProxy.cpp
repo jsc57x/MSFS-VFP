@@ -13,7 +13,7 @@ bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
     this->callback = callback;
 
     // as of dec 2025 there is a bug in SimConnect >= 1.4.5 (https://devsupport.flightsimulator.com/t/memory-leak-in-simconnect-open-function-sdk-1-4-5/17043)
-    
+    // so this only works with SimConnect SDK 1.2.4
     while (FAILED(SimConnect_Open(&this->hSimConnect, "Visual Flight Path", NULL, 0, 0, SIMCONNECT_OPEN_CONFIGINDEX_LOCAL)))
     {
         Sleep(10);
@@ -31,8 +31,11 @@ bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
 
 void SimConnectProxy::subscribeToEvents()
 {
-    SimConnect_SubscribeToSystemEvent(hSimConnect, EVT_SIM_START, "SimStart");
-    SimConnect_SubscribeToSystemEvent(hSimConnect, EVT_SIM_STOP, "SimStop");
+    SimConnect_SubscribeToSystemEvent(hSimConnect, SIM_START, "SimStart");
+    SimConnect_SubscribeToSystemEvent(hSimConnect, SIM_STOP, "SimStop");
+
+    // the simulation might be already running, so we have to poll once for the current state
+    SimConnect_RequestSystemState(hSimConnect, SIM_STATE, "Sim");
 }
 
 void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
@@ -46,6 +49,15 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
     if (command->getCommand() == UDPCommand::SET)
     {
         SetIndicatorCommandConfiguration* setCommand = static_cast<SetIndicatorCommandConfiguration*>(command);
+
+        std::string indicatorType = getIndicatorTypeName(setCommand->getIndicatorTypeID());
+
+        if (indicatorType.empty())
+        {
+            Logger::logError("Indicator type with id " + std::to_string(setCommand->getIndicatorTypeID()) + " does not exist.");
+            return;
+        }
+
         SIMCONNECT_DATA_INITPOSITION pos;
         pos.Latitude = setCommand->getLatitude();
         pos.Longitude = setCommand->getLongitude();
@@ -56,14 +68,10 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
         pos.Airspeed = 0;
         pos.OnGround = 0;
 
-        std::string indicatorType = getIndicatorTypeName(setCommand->getIndicatorTypeID());
+        u32 requestID = nextRequestID.fetch_add(1);
+        setRequestToIndicator(requestID, setCommand->getID());
 
-        if (indicatorType.empty())
-        {
-            Logger::logError("Indicator type with id " + std::to_string(setCommand->getIndicatorTypeID()) + " does not exist.");
-        }
-
-        SimConnect_AICreateSimulatedObject_EX1(hSimConnect, indicatorType.c_str(), nullptr, pos, 1);
+        SimConnect_AICreateSimulatedObject_EX1(hSimConnect, indicatorType.c_str(), nullptr, pos, requestID);
     }
     else if (command->getCommand() == UDPCommand::REMOVE)
     {
@@ -107,7 +115,7 @@ void SimConnectProxy::initIndicatorTypeMapping()
     }
 }
 
-const std::map<u64, std::string>& SimConnectProxy::getIndicatorTypeMapping()
+const std::unordered_map<u64, std::string>& SimConnectProxy::getIndicatorTypeMapping()
 {
     if (this->indicatorTypeMapping.size() == 0)
     {
@@ -119,8 +127,8 @@ const std::map<u64, std::string>& SimConnectProxy::getIndicatorTypeMapping()
 
 std::string SimConnectProxy::getIndicatorTypeName(u64 indicatorTypeID)
 {
-    std::map<u64, std::string> typeMapping = getIndicatorTypeMapping();
-    std::map<u64, std::string>::const_iterator it = typeMapping.find(indicatorTypeID);
+    std::unordered_map<u64, std::string> typeMapping = getIndicatorTypeMapping();
+    std::unordered_map<u64, std::string>::const_iterator it = typeMapping.find(indicatorTypeID);
     if (it == typeMapping.end())
     {
         // nothing found -> return empty string
@@ -139,6 +147,33 @@ void SimConnectProxy::stopSimConnectProxy()
 {
     isRunning = false;
     SimConnect_Close(this->hSimConnect);
+}
+
+void SimConnectProxy::setRequestToIndicator(u32 requestID, u32 indicatorID)
+{
+    std::scoped_lock lk(requestToIndicatorMutex);
+    requestToIndicator[requestID] = indicatorID;
+}
+
+void SimConnectProxy::setIndicatorToSimObject(u32 requestID, u32 simObjectID)
+{
+    std::scoped_lock lk(requestToIndicatorMutex, indicatorToSimObjectMutex);
+    u32 indicatorID = requestToIndicator[requestID];
+
+    if (indicatorID == 0)
+    {
+        Logger::logWarning("Unknown indicator ID detected.");
+        return;
+    }
+
+    requestToIndicator[requestID] = 0;
+    indicatorToSimObject[indicatorID] = simObjectID;
+}
+
+void SimConnectProxy::removeIndicatorMapping(u32 indicatorID)
+{
+    std::scoped_lock lk(indicatorToSimObjectMutex);
+    indicatorToSimObject[indicatorID] = 0;
 }
 
 void SimConnectProxy::runSimConnectMessageLoop()
@@ -172,18 +207,38 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
            SIMCONNECT_RECV_EVENT* evt = reinterpret_cast<SIMCONNECT_RECV_EVENT*>(pData);
            switch (evt->uEventID)
            {
-                case EVT_SIM_START:
+                case SIM_START:
                 {
                     Logger::logInfo("Simulation started");
                     simulationIsActive.store(true, std::memory_order_release);
+
+                    //FIXME Datenbank clearen
+
                     break;
                 }
-                case EVT_SIM_STOP:
+                case SIM_STOP:
                 {
                     Logger::logInfo("Simulation stopped");
                     simulationIsActive.store(false, std::memory_order_release);
                     break;
                 }
+           }
+           break;
+       }
+       case SIMCONNECT_RECV_ID_ASSIGNED_OBJECT_ID:
+       {
+           SIMCONNECT_RECV_ASSIGNED_OBJECT_ID* aoi = reinterpret_cast<SIMCONNECT_RECV_ASSIGNED_OBJECT_ID*>(pData);
+
+           this->setIndicatorToSimObject(aoi->dwRequestID, aoi->dwObjectID);
+           
+           break;
+       }
+       case SIMCONNECT_RECV_ID_SYSTEM_STATE:
+       {
+           SIMCONNECT_RECV_SYSTEM_STATE* st = reinterpret_cast<SIMCONNECT_RECV_SYSTEM_STATE*>(pData);
+           if (st->dwRequestID == SIM_STATE)
+           {
+               simulationIsActive.store(st->dwInteger == 1, std::memory_order_release);
            }
            break;
        }

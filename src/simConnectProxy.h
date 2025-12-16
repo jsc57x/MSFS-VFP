@@ -5,9 +5,11 @@
 
 #include "windows.h"
 #include "SimConnect.h"
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <thread>
+#include <mutex>
+#include <optional>
 
 class SimConnectCallback {
 public:
@@ -27,22 +29,33 @@ private:
     SimConnectCallback* callback;
     HANDLE hSimConnect = NULL;
     
-    std::map<u64, std::string> indicatorTypeMapping;
+    std::unordered_map<u64, std::string> indicatorTypeMapping;
 
     //FIXME: Value will be set (and maybe requested) with the plane information (via message dispatch)
     std::atomic_bool isRunning{ false };
     std::atomic_bool connected{ false };
     std::atomic_bool simulationIsActive{ false };
+    // FIXME if there are more then ~2^32 requests this will finally become 1 and interfere with the reserved IDs
+    std::atomic_int nextRequestID{ 1000 }; // < 1000 will be reserved for system events that are actively polled by this application
 
-    bool isSimulationActive();
-    
+    // FIXME currently the map potentially grow to 2^32 as this is the size of RequestIDs, this could be much smaller...
+    std::unordered_map<u32, u32> requestToIndicator;
+    std::unordered_map<u32, u32> indicatorToSimObject;
+
+    std::mutex requestToIndicatorMutex;
+    std::mutex indicatorToSimObjectMutex;
 
     std::thread recvDataThread;
 
-    void initIndicatorTypeMapping();
+    bool isSimulationActive();
 
-    const std::map<u64, std::string>& getIndicatorTypeMapping();
+    void initIndicatorTypeMapping();
+    const std::unordered_map<u64, std::string>& getIndicatorTypeMapping();
     std::string getIndicatorTypeName(u64 indicatorTypeID);
+
+    void setRequestToIndicator(u32 requestID, u32 indicatorID);
+    void setIndicatorToSimObject(u32 requestID, u32 simObjectID);
+    void removeIndicatorMapping(u32 indicatorID);
 
     void runSimConnectMessageLoop();
     void subscribeToEvents();
@@ -52,8 +65,12 @@ private:
     std::vector<std::string> splitString(const std::string& s, char delimiter);
 };
 
-enum EVENT_ID : DWORD {
-    EVT_SIM_START = 1,
-    EVT_SIM_STOP = 2,
-    EVT_PAUSE = 3,
+enum EventIDs : u32 {
+    SIM_START = 1,
+    SIM_STOP = 2,
+    PAUSE = 3,
+};
+
+enum ReservedRequestIDs : u32 {
+    SIM_STATE = 100,
 };
