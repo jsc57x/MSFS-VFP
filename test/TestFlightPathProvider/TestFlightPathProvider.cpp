@@ -25,7 +25,7 @@ void printHelp();
 
 int sendData(SOCKET sock, sockaddr_in addr, const char* row, int length);
 
-char* convertRowToRaw(std::string row, int* out_len);
+char* convertRowToRaw(std::vector<std::string> rowParts, int* out_len);
 
 char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len);
 char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len);
@@ -137,14 +137,24 @@ void processFile(int targetUPDPort, std::string filePath)
             continue;
         }
 
+
         if (sendRaw)
         {
             sendData(udpTarget, localAddr, row.c_str(), (int)strlen(row.c_str()));
         }
         else {
-            int length;
-            char* rawContent = convertRowToRaw(row, &length);
-            sendData(udpTarget, localAddr, rawContent, length);
+            std::vector<std::string> parts = split(row);
+
+            if (parts.at(0) == "<delay>")
+            {
+                int delay = std::stoi(parts.at(1));
+                Sleep(delay);
+            }
+            else {
+                int length;
+                char* rawContent = convertRowToRaw(parts, &length);
+                sendData(udpTarget, localAddr, rawContent, length);
+            }
         }
     }
 
@@ -170,17 +180,15 @@ int sendData(SOCKET sock, sockaddr_in addr, const char* row, int length)
     return res;
 }
 
-char* convertRowToRaw(std::string row, int* out_len)
+char* convertRowToRaw(std::vector<std::string> rowParts, int* out_len)
 {
-    std::vector<std::string> parts = split(row);
-
-    if (parts.at(0) == "<set>")
+    if (rowParts.at(0) == "<set>")
     {
-        return convertSetIndicatorToRaw(parts, out_len);
+        return convertSetIndicatorToRaw(rowParts, out_len);
     }
-    else if (parts.at(0) == "<rem>")
+    else if (rowParts.at(0) == "<rem>")
     {
-        return convertRemoveIndicatorToRaw(parts, out_len);
+        return convertRemoveIndicatorToRaw(rowParts, out_len);
     }
 
     return 0;
@@ -218,14 +226,22 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
 
 char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len)
 {
-    int commandID = 2;
+    short commandID = 2;
 
-    *out_len = sizeof(int) * (splittedRow.size() - 1);
+    *out_len = sizeof(short) * (splittedRow.size() - 1) + 2;
     
-    char rawContent[1024];
-
+    char* rawContent = new char[1024] {};
 
     memcpy(rawContent, &commandID, sizeof(commandID));
+
+    int curPos = 2;
+
+    for (int i = 1; i < splittedRow.size(); i++)
+    {
+        short indicatorID = static_cast<short>(std::stoi(splittedRow.at(i))); // not very clean but ok for test code
+        memcpy(rawContent + curPos, &indicatorID, sizeof(indicatorID));
+        curPos += sizeof(indicatorID);
+    }
 
     return rawContent;
 }

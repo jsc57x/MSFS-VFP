@@ -38,9 +38,8 @@ private:
     // FIXME if there are more then ~2^32 requests this will finally become 1 and interfere with the reserved IDs
     std::atomic_int nextRequestID{ 1000 }; // < 1000 will be reserved for system events that are actively polled by this application
 
-    // FIXME currently the map potentially grow to 2^32 as this is the size of RequestIDs, this could be much smaller...
-    std::unordered_map<u32, u32> requestToIndicator;
-    std::unordered_map<u32, u32> indicatorToSimObject;
+    std::unordered_map<u32, u16> requestToIndicator;
+    std::unordered_map<u16, u32> indicatorToSimObject;
 
     std::mutex requestToIndicatorMutex;
     std::mutex indicatorToSimObjectMutex;
@@ -53,9 +52,11 @@ private:
     const std::unordered_map<u64, std::string>& getIndicatorTypeMapping();
     std::string getIndicatorTypeName(u64 indicatorTypeID);
 
-    void setRequestToIndicator(u32 requestID, u32 indicatorID);
+    void setRequestToIndicator(u32 requestID, u16 indicatorID);
     void setIndicatorToSimObject(u32 requestID, u32 simObjectID);
-    void removeIndicatorMapping(u32 indicatorID);
+    u32 getSimObjectByIndicator(u16 indicatorID);
+    std::vector<u16> getAllExistingIndicators();
+    void removeIndicatorMapping(u16 indicatorID);
 
     void runSimConnectMessageLoop();
     void subscribeToEvents();

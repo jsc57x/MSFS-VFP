@@ -147,10 +147,15 @@ std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandCon
 {
     RemoveIndicatorsCommandConfiguration command;
 
-    // TODO Parse
+    for (u32 curMemOffset = 2; curMemOffset < length; curMemOffset = curMemOffset + sizeof(u16))
+    {
+        u16 id;
+        memcpy(&id, array + curMemOffset, sizeof(u16));
+        command.addIDToRemove(id);
+    }
+
 
     return std::make_unique<RemoveIndicatorsCommandConfiguration>(command);
-    ;
 }
 
 void RemoveIndicatorsCommandConfiguration::addIDToRemove(u16 id)

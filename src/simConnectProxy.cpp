@@ -71,11 +71,37 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
         u32 requestID = nextRequestID.fetch_add(1);
         setRequestToIndicator(requestID, setCommand->getID());
 
+        u32 existingObjectID = getSimObjectByIndicator(setCommand->getID());
+        if (existingObjectID != 0)
+        {
+            // FIXME: Not sure if we have to react on the completion of the request in message loop
+            SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
+        }
+
         SimConnect_AICreateSimulatedObject_EX1(hSimConnect, indicatorType.c_str(), nullptr, pos, requestID);
     }
     else if (command->getCommand() == UDPCommand::REMOVE)
     {
-    // TODO implement
+        RemoveIndicatorsCommandConfiguration* removeCommand = static_cast<RemoveIndicatorsCommandConfiguration*>(command);
+        std::vector<u16> idsToRemove = removeCommand->getIDsToRemove();
+
+        if (idsToRemove.size() == 0)
+        {
+            // remove all
+            idsToRemove = getAllExistingIndicators();
+        }
+
+        for (u16 id : idsToRemove)
+        {
+            u32 existingObjectID = getSimObjectByIndicator(id);
+            if (existingObjectID != 0)
+            {
+                // FIXME: Not sure if we have to react on the completion of the request in message loop
+                SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
+                removeIndicatorMapping(id);
+            }
+        }
+
     }
     else {
         Logger::logError("Unknown command.");
@@ -149,7 +175,7 @@ void SimConnectProxy::stopSimConnectProxy()
     SimConnect_Close(this->hSimConnect);
 }
 
-void SimConnectProxy::setRequestToIndicator(u32 requestID, u32 indicatorID)
+void SimConnectProxy::setRequestToIndicator(u32 requestID, u16 indicatorID)
 {
     std::scoped_lock lk(requestToIndicatorMutex);
     requestToIndicator[requestID] = indicatorID;
@@ -158,7 +184,7 @@ void SimConnectProxy::setRequestToIndicator(u32 requestID, u32 indicatorID)
 void SimConnectProxy::setIndicatorToSimObject(u32 requestID, u32 simObjectID)
 {
     std::scoped_lock lk(requestToIndicatorMutex, indicatorToSimObjectMutex);
-    u32 indicatorID = requestToIndicator[requestID];
+    u16 indicatorID = requestToIndicator[requestID];
 
     if (indicatorID == 0)
     {
@@ -170,10 +196,36 @@ void SimConnectProxy::setIndicatorToSimObject(u32 requestID, u32 simObjectID)
     indicatorToSimObject[indicatorID] = simObjectID;
 }
 
-void SimConnectProxy::removeIndicatorMapping(u32 indicatorID)
+u32 SimConnectProxy::getSimObjectByIndicator(u16 indicatorID)
 {
     std::scoped_lock lk(indicatorToSimObjectMutex);
-    indicatorToSimObject[indicatorID] = 0;
+    try {
+        return indicatorToSimObject.at(indicatorID);
+    }
+    catch (std::out_of_range e)
+    {
+        return 0;
+    }
+}
+
+std::vector<u16> SimConnectProxy::getAllExistingIndicators()
+{
+    std::scoped_lock lk(indicatorToSimObjectMutex);
+    
+    std::vector<u16> keys(indicatorToSimObject.size());
+
+    for (std::pair<u16, u32> entry : indicatorToSimObject)
+    {
+        keys.push_back(entry.first);
+    }
+
+    return keys;
+}
+
+void SimConnectProxy::removeIndicatorMapping(u16 indicatorID)
+{
+    std::scoped_lock lk(indicatorToSimObjectMutex);
+    indicatorToSimObject.erase(indicatorID);
 }
 
 void SimConnectProxy::runSimConnectMessageLoop()
