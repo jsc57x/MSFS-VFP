@@ -192,7 +192,7 @@ void SimConnectProxy::setIndicatorToSimObject(u32 requestID, u32 simObjectID)
         return;
     }
 
-    requestToIndicator[requestID] = 0;
+    requestToIndicator.erase(requestID);
     indicatorToSimObject[indicatorID] = simObjectID;
 }
 
