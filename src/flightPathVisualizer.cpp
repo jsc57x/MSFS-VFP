@@ -13,6 +13,9 @@ void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targe
     u32 startUDPServRes = udpServer->startUDPServer(serverPort, this);
     //TODO Result auswerten
 
+    udpClient = new UDPClient();
+    udpClient->connect(targetIP, targetPort);
+
     simConnectProxy = new SimConnectProxy();
     simConnectProxy->startSimConnectProxy(this);
 }
@@ -77,14 +80,23 @@ void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* mess
     Logger::logError("Received invalid message (" + errorMsg + "): " + std::string(message, length));
 }
 
-void FlightPathVisualizer::handlePlaneUpdate()
+void FlightPathVisualizer::handlePlaneUpdate(AircraftState* aircraftState)
 {
-    Logger::logInfo("Plane update received");
+    Logger::logInfo("Aircraft state received: Latitude: " + std::to_string(aircraftState->latitude) +
+        " Longitude: " + std::to_string(aircraftState->longitude) +
+        " Altitude: " + std::to_string(aircraftState->altitude) +
+        " Heading: " + std::to_string(aircraftState->heading) +
+        " Bank: " + std::to_string(aircraftState->bank) +
+        " Pitch: " + std::to_string(aircraftState->pitch) +
+        " Speed: " + std::to_string(aircraftState->speed));
+
+    udpClient->sendPlaneStatus(aircraftState);
 }
 
 void FlightPathVisualizer::shutdown()
 {
     udpServer->stopUDPServer();
+    udpClient->disconnect();
     simConnectProxy->stopSimConnectProxy();
 }
 

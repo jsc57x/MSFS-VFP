@@ -36,6 +36,9 @@
     <ClCompile Include="simConnectProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="udpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flightPathVisualizer.h">
@@ -54,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="coordinates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="udpCommand.h">

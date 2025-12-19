@@ -1,5 +1,6 @@
 #pragma once
 
+//general
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -20,3 +21,15 @@ typedef double f64;
 #ifndef FALSE
 #define FALSE 0
 #endif
+
+// subject-specific
+struct AircraftState
+{
+    double latitude;
+    double longitude;
+    double altitude;
+    double heading;
+    double bank;
+    double pitch;
+    double speed;
+};

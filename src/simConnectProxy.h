@@ -14,7 +14,7 @@
 class SimConnectCallback {
 public:
     virtual ~SimConnectCallback() = default;
-    virtual void handlePlaneUpdate(/*WorldPosition planePos*/) = 0;
+    virtual void handlePlaneUpdate(AircraftState* aircraftState) = 0;
 };
 
 class SimConnectProxy {
@@ -74,4 +74,9 @@ enum EventIDs : u32 {
 
 enum ReservedRequestIDs : u32 {
     SIM_STATE = 100,
+    AIRCRAFT_STATE = 200,
+};
+
+enum DATA_DEFINE_ID {
+    AIRCRAFT_STATE_DEFINITION,
 };

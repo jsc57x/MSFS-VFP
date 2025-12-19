@@ -36,6 +36,17 @@ void SimConnectProxy::subscribeToEvents()
 
     // the simulation might be already running, so we have to poll once for the current state
     SimConnect_RequestSystemState(hSimConnect, SIM_STATE, "Sim");
+
+    // Aircraft State
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "PLANE LATITUDE", "degrees");
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "PLANE LONGITUDE", "degrees");
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "PLANE ALTITUDE", "feet");
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "PLANE HEADING DEGREES TRUE", "degrees");
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "PLANE BANK DEGREES", "degrees");
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "PLANE PITCH DEGREES", "degrees");
+    SimConnect_AddToDataDefinition(hSimConnect, AIRCRAFT_STATE_DEFINITION, "GROUND VELOCITY", "knots");
+    
+    SimConnect_RequestDataOnSimObject(hSimConnect, AIRCRAFT_STATE, AIRCRAFT_STATE_DEFINITION, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_SECOND);
 }
 
 void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
@@ -248,13 +259,13 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
 {
     switch (pData->dwID)
     {
-       case SIMCONNECT_RECV_ID_OPEN :
+       case SIMCONNECT_RECV_ID_OPEN : // SimConnect Client is available
        {
            Logger::logInfo("SimConnect Client available");
            connected.store(true, std::memory_order_release);
            break;
        } 
-       case SIMCONNECT_RECV_ID_EVENT :
+       case SIMCONNECT_RECV_ID_EVENT : // Simulation started or stopped
        {
            SIMCONNECT_RECV_EVENT* evt = reinterpret_cast<SIMCONNECT_RECV_EVENT*>(pData);
            switch (evt->uEventID)
@@ -277,7 +288,7 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
            }
            break;
        }
-       case SIMCONNECT_RECV_ID_ASSIGNED_OBJECT_ID:
+       case SIMCONNECT_RECV_ID_ASSIGNED_OBJECT_ID: // object created with given id
        {
            SIMCONNECT_RECV_ASSIGNED_OBJECT_ID* aoi = reinterpret_cast<SIMCONNECT_RECV_ASSIGNED_OBJECT_ID*>(pData);
 
@@ -285,12 +296,24 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
            
            break;
        }
-       case SIMCONNECT_RECV_ID_SYSTEM_STATE:
+       case SIMCONNECT_RECV_ID_SYSTEM_STATE: // current state of the simulation
        {
            SIMCONNECT_RECV_SYSTEM_STATE* st = reinterpret_cast<SIMCONNECT_RECV_SYSTEM_STATE*>(pData);
            if (st->dwRequestID == SIM_STATE)
            {
                simulationIsActive.store(st->dwInteger == 1, std::memory_order_release);
+           }
+           break;
+       }
+       case SIMCONNECT_RECV_ID_SIMOBJECT_DATA: // polled aircraft information
+       {
+           SIMCONNECT_RECV_SIMOBJECT_DATA* pObjData = (SIMCONNECT_RECV_SIMOBJECT_DATA*)pData;
+           switch (pObjData->dwRequestID)
+           {
+           case AIRCRAFT_STATE:
+               AircraftState* aircraftState = (AircraftState*)&pObjData->dwData;
+               this->callback->handlePlaneUpdate(aircraftState);
+               break;
            }
            break;
        }

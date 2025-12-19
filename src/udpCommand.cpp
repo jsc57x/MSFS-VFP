@@ -16,13 +16,13 @@
 #define ALTITUDE_MIN 0.0
 #define ALTITUDE_MAX 1000000 // TODO What is max height???
 
-#define HEADING_MIN 0.0
+#define HEADING_MIN -360.0
 #define HEADING_MAX 360.0
 
-#define BANK_MIN 0.0
+#define BANK_MIN -360.0
 #define BANK_MAX 360.0
 
-#define PITCH_MIN 0.0
+#define PITCH_MIN -360.0
 #define PITCH_MAX 360.0
 
 //////////////

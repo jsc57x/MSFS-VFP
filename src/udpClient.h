@@ -1,15 +1,18 @@
 #pragma once
 
 #include "datatypes.h"
-#include "flightPathVisualizer.h"
+#include <winsock2.h>
+#include <Windows.h>
 #include <string>
 
 class UDPClient{
 public:
-    void sendPlaneStatus(std::string ipAddress, u16 port, PlaneInformation info);
-};
+    u32 connect(std::string targetIPAddress, u16 port);
+    void sendPlaneStatus(AircraftState* aircraftState);
+    void disconnect();
 
-class PlaneInformation : public WorldPosition{
-public:
-    std::string getPlaneName();
+private:
+    SOCKET sock;
+
+    sockaddr_in addr;
 };
