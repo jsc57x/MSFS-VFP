@@ -52,45 +52,39 @@ std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfigurati
 
 bool SetIndicatorCommandConfiguration::validate()
 {
-    bool isValid = true;
-
     if (!isDoubleInRange(latitude, LATITUDE_MIN, LATITUDE_MAX))
     {
         Logger::logError("Latitude is out of range: " + std::to_string(latitude));
-        isValid = false;
+        return false;
     }
 
-    if (isValid && !isDoubleInRange(longitude, LONGITUDE_MIN, LONGITUDE_MAX))
+    if (!isDoubleInRange(longitude, LONGITUDE_MIN, LONGITUDE_MAX))
     {
         Logger::logError("Longitude is out of range: " + std::to_string(longitude));
-        isValid = false;
+        return false;
     }
 
-    if (isValid && !isDoubleInRange(altitude, ALTITUDE_MIN, ALTITUDE_MAX))
+/*    if (!isDoubleInRange(altitude, ALTITUDE_MIN, ALTITUDE_MAX))
     {
         Logger::logError("Altitude is out of range: " + std::to_string(altitude));
-        isValid = false;
     }
 
-    if (isValid && !isDoubleInRange(heading, HEADING_MIN, HEADING_MAX))
+    if (!isDoubleInRange(heading, HEADING_MIN, HEADING_MAX))
     {
         Logger::logError("Heading is out of range: " + std::to_string(heading));
-        isValid = false;
     }
 
-    if (isValid && !isDoubleInRange(bank, BANK_MIN, BANK_MAX))
+    if (!isDoubleInRange(bank, BANK_MIN, BANK_MAX))
     {
         Logger::logError("Bank is out of range: " + std::to_string(bank));
-        isValid = false;
     }
 
-    if (isValid && !isDoubleInRange(pitch, PITCH_MIN, PITCH_MAX))
+    if (!isDoubleInRange(pitch, PITCH_MIN, PITCH_MAX))
     {
         Logger::logError("Pitch is out of range: " + std::to_string(pitch));
-        isValid = false;
-    }    
+    }   */ 
 
-    return isValid;
+    return true;
 }
 
 u16 SetIndicatorCommandConfiguration::getID()
