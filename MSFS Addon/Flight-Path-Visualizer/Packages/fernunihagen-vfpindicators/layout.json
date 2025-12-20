@@ -6,29 +6,119 @@
       "date": 134044190450000000
     },
     {
+      "path": "simobjects/misc/vfp_indicators/model.circle_l/model.cfg",
+      "size": 26,
+      "date": 134107277190000000
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_l/torus.bin",
+      "size": 89856,
+      "date": 134107281020262163
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_l/torus.gltf",
+      "size": 2602,
+      "date": 134107281020262163
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_l/torus.xml",
+      "size": 188,
+      "date": 134107281020000003
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_m/model.cfg",
+      "size": 26,
+      "date": 134107277190000000
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_m/torus.bin",
+      "size": 89856,
+      "date": 134107266230262163
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_m/torus.gltf",
+      "size": 2604,
+      "date": 134107266230262163
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/model.circle_m/torus.xml",
+      "size": 188,
+      "date": 134107281020000003
+    },
+    {
       "path": "simobjects/misc/vfp_indicators/model.circle_s/model.cfg",
-      "size": 28,
-      "date": 134100896460000000
+      "size": 26,
+      "date": 134107277190000000
     },
     {
-      "path": "simobjects/misc/vfp_indicators/model.circle_s/tube001.bin",
-      "size": 13536,
-      "date": 134100409820262163
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/torus.bin",
+      "size": 89856,
+      "date": 134107267200262163
     },
     {
-      "path": "simobjects/misc/vfp_indicators/model.circle_s/tube001.gltf",
-      "size": 2246,
-      "date": 134100409820262163
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/torus.gltf",
+      "size": 2612,
+      "date": 134107267200262163
     },
     {
-      "path": "simobjects/misc/vfp_indicators/model.circle_s/tube001.xml",
-      "size": 176,
-      "date": 134100409830000003
+      "path": "simobjects/misc/vfp_indicators/model.circle_s/torus.xml",
+      "size": 188,
+      "date": 134107281020000003
     },
     {
       "path": "simobjects/misc/vfp_indicators/sim.cfg",
-      "size": 179,
-      "date": 134100896460000000
+      "size": 1202,
+      "date": 134107277190000000
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.blue/base.png.ktx2",
+      "size": 11432,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.blue/base.png.ktx2.json",
+      "size": 102,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.green/base.png.ktx2",
+      "size": 11432,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.green/base.png.ktx2.json",
+      "size": 102,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.red/base.png.ktx2",
+      "size": 11432,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.red/base.png.ktx2.json",
+      "size": 102,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.yellow/base.png.ktx2",
+      "size": 11432,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture.yellow/base.png.ktx2.json",
+      "size": 102,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture/base.png.ktx2",
+      "size": 11432,
+      "date": 134107112260000006
+    },
+    {
+      "path": "simobjects/misc/vfp_indicators/texture/base.png.ktx2.json",
+      "size": 102,
+      "date": 134107112260000006
     }
   ]
 }

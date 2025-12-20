@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelInfo guid="{cb53c3ba-47a2-4792-9b39-c905f49d329e}" version="1.1">
+	<LODS>
+		<LOD minSize="0.0" ModelFile="Torus.gltf"/>
+	</LODS>
+</ModelInfo>

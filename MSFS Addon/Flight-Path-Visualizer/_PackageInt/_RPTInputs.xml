@@ -1,31 +1,241 @@
 <RPTInputs>
-	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageDefinitions\fernunihagen-vfpindicators\ContentInfo\Thumbnail.jpg">
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Torus.xml">
 		<Package Name="fernunihagen-vfpindicators">
-			<AssetGroup Name="ContentInfo"/>
-		</Package>
-	</RPTInput>
-	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Tube001.gltf">
-		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
 			<AssetGroup Name="indicators"/>
 		</Package>
 	</RPTInput>
-	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Tube001.xml">
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_m\Torus.gltf">
 		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_l\Torus.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture\base.png.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_m\model.CFG">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageDefinitions\fernunihagen-vfpindicators\ContentInfo\Thumbnail.jpg">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="ContentInfo"/>
+			<AssetGroup Name="ContentInfo"/>
+			<AssetGroup Name="ContentInfo"/>
+			<AssetGroup Name="ContentInfo"/>
+			<AssetGroup Name="ContentInfo"/>
+			<AssetGroup Name="ContentInfo"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Torus.bin">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.red\base.png.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Torus.gltf">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.blue\base.png.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_l\Torus.bin">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.green\base.png.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.yellow\base.png.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
 			<AssetGroup Name="indicators"/>
 		</Package>
 	</RPTInput>
 	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\sim.cfg">
 		<Package Name="fernunihagen-vfpindicators">
 			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
 		</Package>
 	</RPTInput>
-	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\Tube001.bin">
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_l\Torus.gltf">
 		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture\base.png">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_m\Torus.xml">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.yellow\base.png">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.blue\base.png">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_l\model.CFG">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_m\Torus.bin">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.green\base.png">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
 			<AssetGroup Name="indicators"/>
 		</Package>
 	</RPTInput>
 	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\model.circle_s\model.CFG">
 		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+		</Package>
+	</RPTInput>
+	<RPTInput Path="D:\projects\Bachelor\MSFS-VFP\MSFS Addon\Flight-Path-Visualizer\PackageSources\SimObjects\Misc\VFP_Indicators\texture.red\base.png">
+		<Package Name="fernunihagen-vfpindicators">
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
+			<AssetGroup Name="indicators"/>
 			<AssetGroup Name="indicators"/>
 		</Package>
 	</RPTInput>

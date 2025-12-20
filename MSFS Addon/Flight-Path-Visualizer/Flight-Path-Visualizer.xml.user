@@ -2,7 +2,9 @@
 	<CheckedOutPackages>
 		<Package Name="fernunihagen-vfpindicators"/>
 	</CheckedOutPackages>
-	<SelectedPackages/>
+	<SelectedPackages>
+		<Package Name="fernunihagen-vfpindicators"/>
+	</SelectedPackages>
 	<Filter/>
 	<ShowOnlyEdited>false</ShowOnlyEdited>
 </UserSettings>
