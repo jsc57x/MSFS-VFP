@@ -10,7 +10,7 @@ const char* COLOR_BLUE = "\033[34m";
 const char* COLOR_YELLOW = "\033[33m";
 const char* COLOR_RED = "\033[31m";
 
-void printHelp(u16 defaultReceivingPort, std::string defaultTargetIP, u16 defaultTargetPort)
+void printHelp(ushort defaultReceivingPort, std::string defaultTargetIP, ushort defaultTargetPort)
 {
     std::cout << "Syntax: VisualFlightPathExtension [-p port] [-t ip address] [-tp target port]" << std::endl;
     std::cout << std::endl << "Options:" << std::endl;

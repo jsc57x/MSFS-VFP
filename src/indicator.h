@@ -6,7 +6,7 @@
 class Indicator {
 public:
     std::string getFileName();
-    static Indicator parse(char* array, u32 length);
+    static Indicator parse(char* array, uint length);
 
 private:
     std::string filename;

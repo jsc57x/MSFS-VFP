@@ -4,7 +4,7 @@
 
 #include "datatypes.h"
 
-void printHelp(u16 defaultReceivingPort, std::string defaultTargetIP, u16 defaultTargetPort);
+void printHelp(ushort defaultReceivingPort, std::string defaultTargetIP, ushort defaultTargetPort);
 
 void printInfo(std::string message);
 void printWarning(std::string message);

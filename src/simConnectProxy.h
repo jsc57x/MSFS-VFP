@@ -29,7 +29,7 @@ private:
     SimConnectCallback* callback;
     HANDLE hSimConnect = NULL;
     
-    std::unordered_map<u64, std::string> indicatorTypeMapping;
+    std::unordered_map<ulong, std::string> indicatorTypeMapping;
 
     //FIXME: Value will be set (and maybe requested) with the plane information (via message dispatch)
     std::atomic_bool isRunning{ false };
@@ -38,8 +38,8 @@ private:
     // FIXME if there are more then ~2^32 requests this will finally become 1 and interfere with the reserved IDs
     std::atomic_int nextRequestID{ 1000 }; // < 1000 will be reserved for system events that are actively polled by this application
 
-    std::unordered_map<u32, u16> requestToIndicator;
-    std::unordered_map<u16, u32> indicatorToSimObject;
+    std::unordered_map<uint, ushort> requestToIndicator;
+    std::unordered_map<ushort, uint> indicatorToSimObject;
 
     std::mutex requestToIndicatorMutex;
     std::mutex indicatorToSimObjectMutex;
@@ -49,14 +49,14 @@ private:
     bool isSimulationActive();
 
     void initIndicatorTypeMapping();
-    const std::unordered_map<u64, std::string>& getIndicatorTypeMapping();
-    std::string getIndicatorTypeName(u64 indicatorTypeID);
+    const std::unordered_map<ulong, std::string>& getIndicatorTypeMapping();
+    std::string getIndicatorTypeName(ulong indicatorTypeID);
 
-    void setRequestToIndicator(u32 requestID, u16 indicatorID);
-    void setIndicatorToSimObject(u32 requestID, u32 simObjectID);
-    u32 getSimObjectByIndicator(u16 indicatorID);
-    std::vector<u16> getAllExistingIndicators();
-    void removeIndicatorMapping(u16 indicatorID);
+    void setRequestToIndicator(uint requestID, ushort indicatorID);
+    void setIndicatorToSimObject(uint requestID, uint simObjectID);
+    uint getSimObjectByIndicator(ushort indicatorID);
+    std::vector<ushort> getAllExistingIndicators();
+    void removeIndicatorMapping(ushort indicatorID);
 
     void runSimConnectMessageLoop();
     void subscribeToEvents();
@@ -66,13 +66,13 @@ private:
     std::vector<std::string> splitString(const std::string& s, char delimiter);
 };
 
-enum EventIDs : u32 {
+enum EventIDs : uint {
     SIM_START = 1,
     SIM_STOP = 2,
     PAUSE = 3,
 };
 
-enum ReservedRequestIDs : u32 {
+enum ReservedRequestIDs : uint {
     SIM_STATE = 100,
     AIRCRAFT_STATE = 200,
 };

@@ -7,10 +7,10 @@
 #include <iostream>
 #include <memory>
 
-void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targetPort)
+void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort targetPort)
 {
     udpServer = new UDPServer();
-    u32 startUDPServRes = udpServer->startUDPServer(serverPort, this);
+    uint startUDPServRes = udpServer->startUDPServer(serverPort, this);
     //TODO Result auswerten
 
     udpClient = new UDPClient();
@@ -20,7 +20,7 @@ void FlightPathVisualizer::start(u16 serverPort, std::string targetIP, u16 targe
     simConnectProxy->startSimConnectProxy(this);
 }
 
-void FlightPathVisualizer::handleMessage(char* message, u32 length)
+void FlightPathVisualizer::handleMessage(char* message, uint length)
 {
     std::unique_ptr<UDPCommandConfiguration> command = parseIncomingMessage(message, length);
 
@@ -33,14 +33,14 @@ void FlightPathVisualizer::handleMessage(char* message, u32 length)
     simConnectProxy->handleCommand(commandConfig);
 }
 
-std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, u32 length)
+std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, uint length)
 {
-    if (length < sizeof(u16))
+    if (length < sizeof(ushort))
     {
         handleInvalidMessage("missing command", messageContent, length);
     }
-    u16 commandID;
-    memcpy(&commandID, messageContent, sizeof(u16));
+    ushort commandID;
+    memcpy(&commandID, messageContent, sizeof(ushort));
 
     // this has to be improved if there are more than two commands
     if (commandID != 1 && commandID != 2)
@@ -61,7 +61,7 @@ std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMess
     return NULL;
 }
 
-std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSetCommand(char* message, u32 length)
+std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSetCommand(char* message, uint length)
 {
     if (length != 56)
     {
@@ -70,12 +70,12 @@ std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSet
     return SetIndicatorCommandConfiguration::parse(message);
 }
 
-std::unique_ptr<RemoveIndicatorsCommandConfiguration> FlightPathVisualizer::parseRemoveCommand(char* message, u32 length)
+std::unique_ptr<RemoveIndicatorsCommandConfiguration> FlightPathVisualizer::parseRemoveCommand(char* message, uint length)
 {
     return RemoveIndicatorsCommandConfiguration::parse(message, length);
 }
 
-void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* message, u32 length)
+void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* message, uint length)
 {
     Logger::logError("Received invalid message (" + errorMsg + "): " + std::string(message, length));
 }

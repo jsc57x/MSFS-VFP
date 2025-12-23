@@ -8,12 +8,12 @@
 class UDPMessageCallback {
 public:
     virtual ~UDPMessageCallback() = default;
-    virtual void handleMessage(char* message, u32 length) = 0;
+    virtual void handleMessage(char* message, uint length) = 0;
 };
 
 class UDPServer {
 public: 
-    u32 startUDPServer(u16 udpPort, UDPMessageCallback* callback);
+    uint startUDPServer(ushort udpPort, UDPMessageCallback* callback);
     void stopUDPServer();
 
 private:
@@ -21,7 +21,7 @@ private:
     std::thread serverThread;
     SOCKET sock;
 
-    SOCKET openUDPServerSocket(u16 port);
+    SOCKET openUDPServerSocket(ushort port);
     void closeUDPServerSocket();
 
     void handleSocket(UDPMessageCallback* callback);

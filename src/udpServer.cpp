@@ -9,7 +9,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-u32 UDPServer::startUDPServer(u16 udpPort, UDPMessageCallback* callback)
+uint UDPServer::startUDPServer(ushort udpPort, UDPMessageCallback* callback)
 {
     sock = openUDPServerSocket(udpPort);
     serverThread = std::thread(&UDPServer::handleSocket, this, callback);
@@ -25,7 +25,7 @@ void UDPServer::stopUDPServer()
     serverThread.join();
 }
 
-SOCKET UDPServer::openUDPServerSocket(u16 port)
+SOCKET UDPServer::openUDPServerSocket(ushort port)
 {
     WSADATA wsaData;
     SOCKET sock = INVALID_SOCKET;

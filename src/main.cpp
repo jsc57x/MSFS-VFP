@@ -13,9 +13,9 @@
 
 int main(int argc, char* argv[])
 {
-    u16 serverPort = DEFAULT_RECV_UDP_PORT;
+    ushort serverPort = DEFAULT_RECV_UDP_PORT;
     std::string targetIP = DEFAULT_SEND_IP_ADDR;
-    u16 targetPort = DEFAULT_SEND_UDP_PORT;
+    ushort targetPort = DEFAULT_SEND_UDP_PORT;
     FlightPathVisualizer fpv;
 
     std::cout << PROG_NAME << std::endl;

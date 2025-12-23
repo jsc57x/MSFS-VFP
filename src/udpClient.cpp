@@ -4,7 +4,7 @@
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 
-u32 UDPClient::connect(std::string targetIPAddress, u16 port)
+uint UDPClient::connect(std::string targetIPAddress, ushort port)
 {
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);

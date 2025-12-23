@@ -10,21 +10,21 @@
 
 class FlightPathVisualizer : public UDPMessageCallback, public SimConnectCallback{
 public:
-    void start(u16 serverPort, std::string targetIP, u16 targetPort);
+    void start(ushort serverPort, std::string targetIP, ushort targetPort);
     void shutdown();
 
-    void handleMessage(char* message, u32 length) override;
+    void handleMessage(char* message, uint length) override;
     void handlePlaneUpdate(AircraftState* aircraftState) override;
 
-    void handleInvalidMessage(std::string errorMsg, char* message, u32 length);
+    void handleInvalidMessage(std::string errorMsg, char* message, uint length);
 
 private:
     UDPServer* udpServer;
     UDPClient* udpClient;
     SimConnectProxy* simConnectProxy;
 
-    std::unique_ptr<UDPCommandConfiguration> parseIncomingMessage(char* array, u32 length);
-    std::unique_ptr<SetIndicatorCommandConfiguration> parseSetCommand(char* array, u32 length);
-    std::unique_ptr<RemoveIndicatorsCommandConfiguration> parseRemoveCommand(char* array, u32 length);
+    std::unique_ptr<UDPCommandConfiguration> parseIncomingMessage(char* array, uint length);
+    std::unique_ptr<SetIndicatorCommandConfiguration> parseSetCommand(char* array, uint length);
+    std::unique_ptr<RemoveIndicatorsCommandConfiguration> parseRemoveCommand(char* array, uint length);
 };
 

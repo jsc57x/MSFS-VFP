@@ -32,14 +32,14 @@ std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfigurati
 {
     SetIndicatorCommandConfiguration command;
 
-    memcpy(&command.id, array + 2, sizeof(u16));
-    memcpy(&command.indicatorTypeID, array + 4, sizeof(u32));
-    memcpy(&command.latitude, array + 8, sizeof(f64));
-    memcpy(&command.longitude, array + 16, sizeof(f64));
-    memcpy(&command.altitude, array + 24, sizeof(f64));
-    memcpy(&command.heading, array + 32, sizeof(f64));
-    memcpy(&command.bank, array + 40, sizeof(f64));
-    memcpy(&command.pitch, array + 48, sizeof(f64));
+    memcpy(&command.id, array + 2, sizeof(ushort));
+    memcpy(&command.indicatorTypeID, array + 4, sizeof(uint));
+    memcpy(&command.latitude, array + 8, sizeof(double));
+    memcpy(&command.longitude, array + 16, sizeof(double));
+    memcpy(&command.altitude, array + 24, sizeof(double));
+    memcpy(&command.heading, array + 32, sizeof(double));
+    memcpy(&command.bank, array + 40, sizeof(double));
+    memcpy(&command.pitch, array + 48, sizeof(double));
     if (command.validate())
     {
     return std::make_unique<SetIndicatorCommandConfiguration>(command);
@@ -87,42 +87,42 @@ bool SetIndicatorCommandConfiguration::validate()
     return true;
 }
 
-u16 SetIndicatorCommandConfiguration::getID()
+ushort SetIndicatorCommandConfiguration::getID()
 {
     return this->id;
 }
 
-u32 SetIndicatorCommandConfiguration::getIndicatorTypeID()
+uint SetIndicatorCommandConfiguration::getIndicatorTypeID()
 {
     return this->indicatorTypeID;
 }
 
-f64 SetIndicatorCommandConfiguration::getLatitude()
+double SetIndicatorCommandConfiguration::getLatitude()
 {
     return this->latitude;
 }
 
-f64 SetIndicatorCommandConfiguration::getLongitude()
+double SetIndicatorCommandConfiguration::getLongitude()
 {
     return this->longitude;
 }
 
-f64 SetIndicatorCommandConfiguration::getAltitude()
+double SetIndicatorCommandConfiguration::getAltitude()
 {
     return this->altitude;
 }
 
-f64 SetIndicatorCommandConfiguration::getHeading()
+double SetIndicatorCommandConfiguration::getHeading()
 {
     return this->heading;
 }
 
-f64 SetIndicatorCommandConfiguration::getBank()
+double SetIndicatorCommandConfiguration::getBank()
 {
     return this->bank;
 }
 
-f64 SetIndicatorCommandConfiguration::getPitch()
+double SetIndicatorCommandConfiguration::getPitch()
 {
     return this->pitch;
 }
@@ -137,14 +137,14 @@ std::string SetIndicatorCommandConfiguration::toString()
 //////////////
 /// REMOVE ///
 //////////////
-std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandConfiguration::parse(char* array, u32 length)
+std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandConfiguration::parse(char* array, uint length)
 {
     RemoveIndicatorsCommandConfiguration command;
 
-    for (u32 curMemOffset = 2; curMemOffset < length; curMemOffset = curMemOffset + sizeof(u16))
+    for (uint curMemOffset = 2; curMemOffset < length; curMemOffset = curMemOffset + sizeof(ushort))
     {
-        u16 id;
-        memcpy(&id, array + curMemOffset, sizeof(u16));
+        ushort id;
+        memcpy(&id, array + curMemOffset, sizeof(ushort));
         command.addIDToRemove(id);
     }
 
@@ -152,12 +152,12 @@ std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandCon
     return std::make_unique<RemoveIndicatorsCommandConfiguration>(command);
 }
 
-void RemoveIndicatorsCommandConfiguration::addIDToRemove(u16 id)
+void RemoveIndicatorsCommandConfiguration::addIDToRemove(ushort id)
 {
     this->idsToRemove.push_back(id);
 }
 
-std::vector<u16> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
+std::vector<ushort> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
 {
     return this->idsToRemove;
 }

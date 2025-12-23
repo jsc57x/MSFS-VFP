@@ -23,27 +23,27 @@ public:
         return UDPCommand::SET;
     }
 
-    u16 getID();
-    u32 getIndicatorTypeID();
+    ushort getID();
+    uint getIndicatorTypeID();
          
-    f64 getLatitude();
-    f64 getLongitude();
-    f64 getAltitude();
-    f64 getHeading();
-    f64 getBank();
-    f64 getPitch();
+    double getLatitude();
+    double getLongitude();
+    double getAltitude();
+    double getHeading();
+    double getBank();
+    double getPitch();
 
     std::string toString() override;
 
 private:
-    u16 id;
-    u32 indicatorTypeID;
-    f64 latitude;
-    f64 longitude;
-    f64 altitude;
-    f64 heading;
-    f64 bank;
-    f64 pitch;
+    ushort id;
+    uint indicatorTypeID;
+    double latitude;
+    double longitude;
+    double altitude;
+    double heading;
+    double bank;
+    double pitch;
 
     bool validate();
 };
@@ -51,19 +51,19 @@ private:
 class RemoveIndicatorsCommandConfiguration : public UDPCommandConfiguration
 {
 public:
-    static std::unique_ptr<RemoveIndicatorsCommandConfiguration> parse(char* array, u32 length);
+    static std::unique_ptr<RemoveIndicatorsCommandConfiguration> parse(char* array, uint length);
 
     UDPCommand getCommand() override {
         return UDPCommand::REMOVE;
     }
 
-    void addIDToRemove(u16 id);
-    std::vector<u16> getIDsToRemove();
+    void addIDToRemove(ushort id);
+    std::vector<ushort> getIDsToRemove();
 
     std::string toString() override;
 
 private:
-    std::vector<u16> idsToRemove;
+    std::vector<ushort> idsToRemove;
 
     bool validate();
 };

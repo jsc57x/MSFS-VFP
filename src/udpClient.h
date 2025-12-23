@@ -7,7 +7,7 @@
 
 class UDPClient{
 public:
-    u32 connect(std::string targetIPAddress, u16 port);
+    uint connect(std::string targetIPAddress, ushort port);
     void sendPlaneStatus(AircraftState* aircraftState);
     void disconnect();
 

@@ -6,7 +6,7 @@ std::string Indicator::getFileName()
     return this->filename;
 }
 
-Indicator Indicator::parse(char* array, u32 length)
+Indicator Indicator::parse(char* array, uint length)
 {
     Indicator indicator;
     //TODO Implement
