@@ -318,7 +318,6 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
         double setBank = std::stod(command.at(7)) + bank;
         double setPitch = std::stod(command.at(8)) + pitch;
 
-
         int length;
         char* rawContent = createSetIndicator(indicatorID, indicatorTypeID, setLatitude, setLongitude, setAltitude, setHeading, setBank, setPitch, &length);
         sendData(target, addr, rawContent, length);

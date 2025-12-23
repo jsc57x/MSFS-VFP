@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 
+
 bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
 {
     this->callback = callback;
@@ -238,11 +239,6 @@ void SimConnectProxy::runSimConnectMessageLoop()
 
     subscribeToEvents();
 
-    while (!connected.load(std::memory_order_acquire))
-    {
-        Sleep(10);
-    }
-
     isRunning = true;
     while (isRunning)
     {
@@ -261,12 +257,6 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
 {
     switch (pData->dwID)
     {
-       case SIMCONNECT_RECV_ID_OPEN : // SimConnect Client is available
-       {
-           Logger::logInfo("SimConnect Client available");
-           connected.store(true, std::memory_order_release);
-           break;
-       } 
        case SIMCONNECT_RECV_ID_EVENT : // Simulation started or stopped
        {
            SIMCONNECT_RECV_EVENT* evt = reinterpret_cast<SIMCONNECT_RECV_EVENT*>(pData);
@@ -313,8 +303,8 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
            switch (pObjData->dwRequestID)
            {
            case AIRCRAFT_STATE:
-               AircraftState* aircraftState = (AircraftState*)&pObjData->dwData;
-               this->callback->handlePlaneUpdate(aircraftState);
+               AircraftStateStruct* aircraftStateStruct = (AircraftStateStruct*)&pObjData->dwData;
+               this->callback->handlePlaneUpdate(new AircraftState(aircraftStateStruct));
                break;
            }
            break;

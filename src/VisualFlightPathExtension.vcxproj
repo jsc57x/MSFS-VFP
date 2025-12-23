@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AircraftState.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="indicator.cpp" />
     <ClCompile Include="main.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="flightPathVisualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aircraftState.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="datatypes.h" />
     <ClInclude Include="doubleHelper.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="flightPathVisualizer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="simConnectProxy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

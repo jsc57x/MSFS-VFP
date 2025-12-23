@@ -1,5 +1,6 @@
 #include "udpClient.h"
 #include "log.h"
+#include "aircraftState.h"
 
 #include <WinSock2.h>
 #include <ws2tcpip.h>
@@ -36,13 +37,21 @@ void UDPClient::sendPlaneStatus(AircraftState* aircraftState)
     int contentLength = 56;
     char* rawContent = new char[contentLength] {};
 
-    memcpy(rawContent, &aircraftState->latitude, sizeof(&aircraftState->latitude));
-    memcpy(rawContent + 8, &aircraftState->longitude, sizeof(&aircraftState->longitude));
-    memcpy(rawContent + 16, &aircraftState->altitude, sizeof(&aircraftState->altitude));
-    memcpy(rawContent + 24, &aircraftState->heading, sizeof(&aircraftState->heading));
-    memcpy(rawContent + 32, &aircraftState->bank, sizeof(&aircraftState->bank));
-    memcpy(rawContent + 40, &aircraftState->pitch, sizeof(&aircraftState->pitch));
-    memcpy(rawContent + 48, &aircraftState->speed, sizeof(&aircraftState->speed));
+    double latitude = aircraftState->getLatitude();
+    double longitude = aircraftState->getLongitude();
+    double altitude = aircraftState->getAltitude();
+    double heading = aircraftState->getHeading();
+    double bank = aircraftState->getBank();
+    double pitch = aircraftState->getPitch();
+    double speed = aircraftState->getSpeed();
+
+    memcpy(rawContent, &latitude, sizeof(latitude));
+    memcpy(rawContent + 8, &longitude, sizeof(longitude));
+    memcpy(rawContent + 16, &altitude, sizeof(altitude));
+    memcpy(rawContent + 24, &heading, sizeof(heading));
+    memcpy(rawContent + 32, &bank, sizeof(bank));
+    memcpy(rawContent + 40, &pitch, sizeof(pitch));
+    memcpy(rawContent + 48, &speed, sizeof(speed));
 
     int res = sendto(sock, rawContent, contentLength, 0, (sockaddr*)&addr, sizeof(addr));
 

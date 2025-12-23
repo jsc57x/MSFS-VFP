@@ -82,13 +82,13 @@ void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* mess
 
 void FlightPathVisualizer::handlePlaneUpdate(AircraftState* aircraftState)
 {
-    Logger::logInfo("Aircraft state received: Latitude: " + std::to_string(aircraftState->latitude) +
-        " Longitude: " + std::to_string(aircraftState->longitude) +
-        " Altitude: " + std::to_string(aircraftState->altitude) +
-        " Heading: " + std::to_string(aircraftState->heading) +
-        " Bank: " + std::to_string(aircraftState->bank) +
-        " Pitch: " + std::to_string(aircraftState->pitch) +
-        " Speed: " + std::to_string(aircraftState->speed));
+    Logger::logInfo("Aircraft state received: Latitude: " + std::to_string(aircraftState->getLatitude()) +
+        " Longitude: " + std::to_string(aircraftState->getLongitude()) +
+        " Altitude: " + std::to_string(aircraftState->getAltitude()) +
+        " Heading: " + std::to_string(aircraftState->getHeading()) +
+        " Bank: " + std::to_string(aircraftState->getBank()) +
+        " Pitch: " + std::to_string(aircraftState->getPitch()) +
+        " Speed: " + std::to_string(aircraftState->getSpeed()));
 
     udpClient->sendPlaneStatus(aircraftState);
 }

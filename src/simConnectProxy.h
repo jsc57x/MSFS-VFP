@@ -2,6 +2,7 @@
 
 #include "datatypes.h"
 #include "udpCommand.h"
+#include "aircraftState.h"
 
 #include "windows.h"
 #include "SimConnect.h"
@@ -33,7 +34,6 @@ private:
 
     //FIXME: Value will be set (and maybe requested) with the plane information (via message dispatch)
     std::atomic_bool isRunning{ false };
-    std::atomic_bool connected{ false };
     std::atomic_bool simulationIsActive{ false };
     // FIXME if there are more then ~2^32 requests this will finally become 1 and interfere with the reserved IDs
     std::atomic_int nextRequestID{ 1000 }; // < 1000 will be reserved for system events that are actively polled by this application
