@@ -25,7 +25,4 @@ private:
     void closeUDPServerSocket();
 
     void handleSocket(UDPMessageCallback* callback);
-
-    void printMessage(std::string message);
-    void handleUDPMessage(std::string message);
 };

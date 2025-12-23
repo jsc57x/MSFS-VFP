@@ -1,27 +1,16 @@
 #pragma once
+#include "worldPosition.h"
 
-struct AircraftStateStruct
+struct AircraftStateStruct : WorldPositionStruct
 {
-    double latitude;
-    double longitude;
-    double altitude;
-    double heading;
-    double bank;
-    double pitch;
     double speed;
 };
 
-class AircraftState
+class AircraftState : public WorldPosition
 {
 public:
-    AircraftState(AircraftStateStruct* stateStruct);
+    AircraftState(AircraftStateStruct* stateStruct) : WorldPosition(static_cast<WorldPositionStruct*>(stateStruct)), state(stateStruct) {};
 
-    double getLatitude();
-    double getLongitude();
-    double getAltitude();
-    double getHeading();
-    double getBank();
-    double getPitch();
     double getSpeed();
 private:
     AircraftStateStruct* state;

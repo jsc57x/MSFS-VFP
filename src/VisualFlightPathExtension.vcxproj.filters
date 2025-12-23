@@ -39,6 +39,12 @@
     <ClCompile Include="udpClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AircraftState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldPosition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flightPathVisualizer.h">
@@ -65,10 +71,17 @@
     <ClInclude Include="doubleHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="aircraftState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="worldPosition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="simConnectProxy.h">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

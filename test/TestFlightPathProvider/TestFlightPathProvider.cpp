@@ -304,9 +304,6 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
 
     for (std::vector<std::string> command : commands)
     {
-        // FIXME handle Remove
-
-        
         short indicatorID = static_cast<short>(std::stoi(command.at(1))); // not very clean but ok for test code
         long indicatorTypeID = std::stoi(command.at(2));
 
@@ -322,8 +319,6 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
         char* rawContent = createSetIndicator(indicatorID, indicatorTypeID, setLatitude, setLongitude, setAltitude, setHeading, setBank, setPitch, &length);
         sendData(target, addr, rawContent, length);
     }
-
-
 }
 
 int sendData(SOCKET sock, sockaddr_in addr, const char* row, int length)

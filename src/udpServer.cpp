@@ -31,7 +31,7 @@ SOCKET UDPServer::openUDPServerSocket(ushort port)
     SOCKET sock = INVALID_SOCKET;
     struct sockaddr_in serverAddr;
 
-    Logger::logInfo(("Connecting to port " + std::to_string(port) + "...").c_str());
+    Logger::logInfo(("Connecting to UDP port " + std::to_string(port) + "...").c_str());
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         Logger::logError("WSAStartup failed.");
@@ -40,7 +40,7 @@ SOCKET UDPServer::openUDPServerSocket(ushort port)
 
     sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock == INVALID_SOCKET) {
-        Logger::logError("Create socket failed: " + WSAGetLastError());
+        Logger::logError("Create socket failed. WSA Error: " + WSAGetLastError());
         WSACleanup();
         return 1;
     }
@@ -50,13 +50,13 @@ SOCKET UDPServer::openUDPServerSocket(ushort port)
     serverAddr.sin_port = htons(port);
 
     if (bind(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-        Logger::logError("Failed to bind to socket: " + WSAGetLastError());
+        Logger::logError("Failed to bind to socket. WSA Error: " + WSAGetLastError());
         closesocket(sock);
         WSACleanup();
         return 1;
     }
 
-    Logger::logInfo("Connected");
+    Logger::logInfo("UDP Port connected");
 
     return sock;
 }
@@ -86,23 +86,11 @@ void UDPServer::handleSocket(UDPMessageCallback* callback)
             return;
         }
 
-        if (recvLen == SOCKET_ERROR) {  
-            printf("recvfrom() Fehler: %d\n", WSAGetLastError());
+        if (recvLen == SOCKET_ERROR) { 
+            Logger::logError("Failed to handle incoming UDP message. WSA Error: " + std::to_string(WSAGetLastError()));
             break;
         }
 
         callback->handleMessage(buffer, recvLen);
     }
-}
-
-void UDPServer::handleUDPMessage(std::string message)
-{
-    printMessage(message);
-}
-
-//TODO: Übergebe ich hier einen String oder ein struct mit den Details?
-void UDPServer::printMessage(std::string message)
-{
-    //FIXME: Alleine ein String reicht hier vermutlich nicht aus, mindestens ein Validierungsstatus der Message wäre noch gut, die Validierung findet aber nicht unbedingt hier statt
-    std::cout << message << std::endl;
 }

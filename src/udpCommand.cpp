@@ -28,21 +28,34 @@
 //////////////
 ///   SET  ///
 //////////////
+
 std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfiguration::parse(char* array)
 {
-    SetIndicatorCommandConfiguration command;
+    ushort id;
+    uint indicatorTypeID;
+    double latitude;
+    double longitude;
+    double altitude;
+    double heading;
+    double bank;
+    double pitch;
 
-    memcpy(&command.id, array + 2, sizeof(ushort));
-    memcpy(&command.indicatorTypeID, array + 4, sizeof(uint));
-    memcpy(&command.latitude, array + 8, sizeof(double));
-    memcpy(&command.longitude, array + 16, sizeof(double));
-    memcpy(&command.altitude, array + 24, sizeof(double));
-    memcpy(&command.heading, array + 32, sizeof(double));
-    memcpy(&command.bank, array + 40, sizeof(double));
-    memcpy(&command.pitch, array + 48, sizeof(double));
-    if (command.validate())
+    memcpy(&id, array + 2, sizeof(id));
+    memcpy(&indicatorTypeID, array + 4, sizeof(indicatorTypeID));
+    memcpy(&latitude, array + 8, sizeof(latitude));
+    memcpy(&longitude, array + 16, sizeof(longitude));
+    memcpy(&altitude, array + 24, sizeof(altitude));
+    memcpy(&heading, array + 32, sizeof(heading));
+    memcpy(&bank, array + 40, sizeof(bank));
+    memcpy(&pitch, array + 48, sizeof(pitch));
+
+    WorldPosition worldPos = WorldPosition(latitude, longitude, altitude, heading, bank, pitch);
+    SetIndicatorCommandConfiguration commandConfig = SetIndicatorCommandConfiguration(id, indicatorTypeID, worldPos);
+
+
+    if (commandConfig.validate())
     {
-    return std::make_unique<SetIndicatorCommandConfiguration>(command);
+    return std::make_unique<SetIndicatorCommandConfiguration>(commandConfig);
     }
     else {
         return nullptr;
@@ -52,15 +65,15 @@ std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfigurati
 
 bool SetIndicatorCommandConfiguration::validate()
 {
-    if (!isDoubleInRange(latitude, LATITUDE_MIN, LATITUDE_MAX))
+    if (!isDoubleInRange(position.getLatitude(), LATITUDE_MIN, LATITUDE_MAX))
     {
-        Logger::logError("Latitude is out of range: " + std::to_string(latitude));
+        Logger::logError("Latitude is out of range: " + std::to_string(position.getLatitude()));
         return false;
     }
 
-    if (!isDoubleInRange(longitude, LONGITUDE_MIN, LONGITUDE_MAX))
+    if (!isDoubleInRange(position.getLongitude(), LONGITUDE_MIN, LONGITUDE_MAX))
     {
-        Logger::logError("Longitude is out of range: " + std::to_string(longitude));
+        Logger::logError("Longitude is out of range: " + std::to_string(position.getLongitude()));
         return false;
     }
 
@@ -97,41 +110,21 @@ uint SetIndicatorCommandConfiguration::getIndicatorTypeID()
     return this->indicatorTypeID;
 }
 
-double SetIndicatorCommandConfiguration::getLatitude()
+WorldPosition SetIndicatorCommandConfiguration::getPosition()
 {
-    return this->latitude;
-}
-
-double SetIndicatorCommandConfiguration::getLongitude()
-{
-    return this->longitude;
-}
-
-double SetIndicatorCommandConfiguration::getAltitude()
-{
-    return this->altitude;
-}
-
-double SetIndicatorCommandConfiguration::getHeading()
-{
-    return this->heading;
-}
-
-double SetIndicatorCommandConfiguration::getBank()
-{
-    return this->bank;
-}
-
-double SetIndicatorCommandConfiguration::getPitch()
-{
-    return this->pitch;
+    return this->position;
 }
 
 std::string SetIndicatorCommandConfiguration::toString()
 {
-    return "Set Indicator: Indicator " + std::to_string(id) + " of type " + std::to_string(indicatorTypeID) + " Lat: " + std::to_string(latitude) + ", Long: " + std::to_string(longitude) +
-        ", Height: " + std::to_string(altitude) + ", Roll: " + std::to_string(heading) + ", Pitch: " + std::to_string(bank) +
-        ", Yaw: " + std::to_string(pitch);
+    return "Set Indicator: Indicator " + std::to_string(id) + 
+        " of type " + std::to_string(indicatorTypeID) + 
+        " Lat: " + std::to_string(position.getLatitude()) + 
+        ", Long: " + std::to_string(position.getLongitude()) +
+        ", Height: " + std::to_string(position.getAltitude()) + 
+        ", Roll: " + std::to_string(position.getHeading()) + 
+        ", Pitch: " + std::to_string(position.getBank()) +
+        ", Yaw: " + std::to_string(position.getPitch());
 }
 
 //////////////
@@ -145,16 +138,10 @@ std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandCon
     {
         ushort id;
         memcpy(&id, array + curMemOffset, sizeof(ushort));
-        command.addIDToRemove(id);
+        command.idsToRemove.push_back(id);
     }
 
-
     return std::make_unique<RemoveIndicatorsCommandConfiguration>(command);
-}
-
-void RemoveIndicatorsCommandConfiguration::addIDToRemove(ushort id)
-{
-    this->idsToRemove.push_back(id);
 }
 
 std::vector<ushort> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
@@ -162,14 +149,8 @@ std::vector<ushort> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
     return this->idsToRemove;
 }
 
-bool RemoveIndicatorsCommandConfiguration::validate()
-{
-    bool isValid = true;
-
-    return isValid;
-}
-
 std::string RemoveIndicatorsCommandConfiguration::toString()
 {
+    // FIXME
     return "";
 }

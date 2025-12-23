@@ -23,7 +23,7 @@ public:
     bool startSimConnectProxy(SimConnectCallback* callback);
     void stopSimConnectProxy();
 
-    void handleCommand(UDPCommandConfiguration* command);
+    void handleCommand(AbstractCommandConfiguration* command);
     void resetIndicatorTypeMapping();
 
 private:

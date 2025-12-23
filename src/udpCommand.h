@@ -1,69 +1,61 @@
 #pragma once
 
 #include "datatypes.h"
+#include "worldPosition.h"
 #include <string>
 #include <vector>
 #include <memory>
 
-enum UDPCommand { SET, REMOVE };
+enum Command { SET, REMOVE };
 
-class UDPCommandConfiguration {
+class AbstractCommandConfiguration {
 public:
-    virtual UDPCommand getCommand() = 0;
+    virtual Command getCommand() = 0;
     virtual std::string toString() = 0;
-    virtual ~UDPCommandConfiguration() = default;
 };
 
-class SetIndicatorCommandConfiguration : public UDPCommandConfiguration
+class SetIndicatorCommandConfiguration : public AbstractCommandConfiguration
 {
 public:
     static std::unique_ptr<SetIndicatorCommandConfiguration> parse(char* array);
 
-    UDPCommand getCommand() override {
-        return UDPCommand::SET;
+    Command getCommand() override {
+        return Command::SET;
     }
 
     ushort getID();
     uint getIndicatorTypeID();
          
-    double getLatitude();
-    double getLongitude();
-    double getAltitude();
-    double getHeading();
-    double getBank();
-    double getPitch();
+    WorldPosition getPosition();
 
     std::string toString() override;
 
 private:
     ushort id;
     uint indicatorTypeID;
-    double latitude;
-    double longitude;
-    double altitude;
-    double heading;
-    double bank;
-    double pitch;
+    WorldPosition position;
 
+    SetIndicatorCommandConfiguration(ushort id, 
+                                     uint indicatorTypeID, 
+                                     WorldPosition worldPosition) 
+    : id(id), indicatorTypeID(indicatorTypeID), position(worldPosition) {};
+    
     bool validate();
 };
 
-class RemoveIndicatorsCommandConfiguration : public UDPCommandConfiguration
+class RemoveIndicatorsCommandConfiguration : public AbstractCommandConfiguration
 {
 public:
     static std::unique_ptr<RemoveIndicatorsCommandConfiguration> parse(char* array, uint length);
 
-    UDPCommand getCommand() override {
-        return UDPCommand::REMOVE;
+    Command getCommand() override {
+        return Command::REMOVE;
     }
 
-    void addIDToRemove(ushort id);
     std::vector<ushort> getIDsToRemove();
 
     std::string toString() override;
 
 private:
     std::vector<ushort> idsToRemove;
-
-    bool validate();
 };

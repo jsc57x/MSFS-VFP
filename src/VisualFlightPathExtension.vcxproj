@@ -138,6 +138,7 @@
     <ClCompile Include="udpCommand.cpp" />
     <ClCompile Include="udpServer.cpp" />
     <ClCompile Include="flightPathVisualizer.cpp" />
+    <ClCompile Include="WorldPosition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aircraftState.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="udpCommand.h" />
     <ClInclude Include="udpServer.h" />
     <ClInclude Include="flightPathVisualizer.h" />
+    <ClInclude Include="worldPosition.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

@@ -22,18 +22,18 @@ void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort
 
 void FlightPathVisualizer::handleMessage(char* message, uint length)
 {
-    std::unique_ptr<UDPCommandConfiguration> command = parseIncomingMessage(message, length);
+    std::unique_ptr<AbstractCommandConfiguration> command = parseIncomingMessage(message, length);
 
     // make sure command was parsed and is not null
     if (command == NULL) return;
 
-    UDPCommandConfiguration* commandConfig = command.get();
+    AbstractCommandConfiguration* commandConfig = command.get();
 
     Logger::logInfo(commandConfig->toString());
     simConnectProxy->handleCommand(commandConfig);
 }
 
-std::unique_ptr<UDPCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, uint length)
+std::unique_ptr<AbstractCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, uint length)
 {
     if (length < sizeof(ushort))
     {

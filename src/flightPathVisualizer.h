@@ -23,7 +23,7 @@ private:
     UDPClient* udpClient;
     SimConnectProxy* simConnectProxy;
 
-    std::unique_ptr<UDPCommandConfiguration> parseIncomingMessage(char* array, uint length);
+    std::unique_ptr<AbstractCommandConfiguration> parseIncomingMessage(char* array, uint length);
     std::unique_ptr<SetIndicatorCommandConfiguration> parseSetCommand(char* array, uint length);
     std::unique_ptr<RemoveIndicatorsCommandConfiguration> parseRemoveCommand(char* array, uint length);
 };

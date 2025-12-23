@@ -38,7 +38,7 @@ void SimConnectProxy::subscribeToEvents()
     SimConnect_RequestDataOnSimObject(hSimConnect, AIRCRAFT_STATE, AIRCRAFT_STATE_DEFINITION, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_SECOND);
 }
 
-void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
+void SimConnectProxy::handleCommand(AbstractCommandConfiguration* command)
 {
     if (!isSimulationActive())
     {
@@ -46,7 +46,7 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
         return;
     }
 
-    if (command->getCommand() == UDPCommand::SET)
+    if (command->getCommand() == Command::SET)
     {
         SetIndicatorCommandConfiguration* setCommand = static_cast<SetIndicatorCommandConfiguration*>(command);
 
@@ -58,13 +58,15 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
             return;
         }
 
+        WorldPosition worldPosition = setCommand->getPosition();
+
         SIMCONNECT_DATA_INITPOSITION pos;
-        pos.Latitude = setCommand->getLatitude();
-        pos.Longitude = setCommand->getLongitude();
-        pos.Altitude = setCommand->getAltitude();
-        pos.Heading = setCommand->getHeading();
-        pos.Bank = setCommand->getBank();
-        pos.Pitch = setCommand->getPitch();
+        pos.Latitude = worldPosition.getLatitude();
+        pos.Longitude = worldPosition.getLongitude();
+        pos.Altitude = worldPosition.getAltitude();
+        pos.Heading = worldPosition.getHeading();
+        pos.Bank = worldPosition.getBank();
+        pos.Pitch = worldPosition.getPitch();
         pos.Airspeed = 0;
         pos.OnGround = 0;
 
@@ -80,7 +82,7 @@ void SimConnectProxy::handleCommand(UDPCommandConfiguration* command)
 
         SimConnect_AICreateSimulatedObject_EX1(hSimConnect, indicatorType.c_str(), nullptr, pos, requestID);
     }
-    else if (command->getCommand() == UDPCommand::REMOVE)
+    else if (command->getCommand() == Command::REMOVE)
     {
         RemoveIndicatorsCommandConfiguration* removeCommand = static_cast<RemoveIndicatorsCommandConfiguration*>(command);
         std::vector<ushort> idsToRemove = removeCommand->getIDsToRemove();
