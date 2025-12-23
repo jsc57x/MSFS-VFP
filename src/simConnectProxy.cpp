@@ -12,19 +12,7 @@ bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
 {
     this->callback = callback;
 
-    // as of dec 2025 there is a bug in SimConnect >= 1.4.5 (https://devsupport.flightsimulator.com/t/memory-leak-in-simconnect-open-function-sdk-1-4-5/17043)
-    // so this only works with SimConnect SDK 1.2.4
-    while (FAILED(SimConnect_Open(&this->hSimConnect, "Visual Flight Path", NULL, 0, 0, SIMCONNECT_OPEN_CONFIGINDEX_LOCAL)))
-    {
-        Sleep(10);
-    }
-
-    subscribeToEvents();
-
     recvDataThread = std::thread(&SimConnectProxy::runSimConnectMessageLoop, this);
-
-    while (!connected.load(std::memory_order_acquire))
-        Sleep(10);
 
     return 0;
 }
@@ -241,6 +229,20 @@ void SimConnectProxy::removeIndicatorMapping(ushort indicatorID)
 
 void SimConnectProxy::runSimConnectMessageLoop()
 {
+    // as of dec 2025 there is a bug in SimConnect >= 1.4.5 (https://devsupport.flightsimulator.com/t/memory-leak-in-simconnect-open-function-sdk-1-4-5/17043)
+    // so this only works with SimConnect SDK 1.2.4
+    while (FAILED(SimConnect_Open(&this->hSimConnect, "Visual Flight Path", NULL, 0, 0, SIMCONNECT_OPEN_CONFIGINDEX_LOCAL)))
+    {
+        Sleep(10);
+    }
+
+    subscribeToEvents();
+
+    while (!connected.load(std::memory_order_acquire))
+    {
+        Sleep(10);
+    }
+
     isRunning = true;
     while (isRunning)
     {
