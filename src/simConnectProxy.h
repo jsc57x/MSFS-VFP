@@ -46,6 +46,7 @@ private:
 
     std::thread recvDataThread;
 
+
     bool isSimulationActive();
 
     void initIndicatorTypeMapping();

@@ -25,7 +25,6 @@ public:
 
     ushort getID();
     uint getIndicatorTypeID();
-         
     WorldPosition getPosition();
 
     std::string toString() override;
@@ -46,16 +45,15 @@ private:
 class RemoveIndicatorsCommandConfiguration : public AbstractCommandConfiguration
 {
 public:
-    static std::unique_ptr<RemoveIndicatorsCommandConfiguration> parse(char* array, uint length);
-
     Command getCommand() override {
         return Command::REMOVE;
     }
-
+    std::string toString() override;
+    
+    static std::unique_ptr<RemoveIndicatorsCommandConfiguration> parse(char* array, uint length);
     std::vector<ushort> getIDsToRemove();
 
-    std::string toString() override;
-
 private:
+    RemoveIndicatorsCommandConfiguration();
     std::vector<ushort> idsToRemove;
 };
