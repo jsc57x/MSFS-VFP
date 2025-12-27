@@ -43,5 +43,13 @@ int main(int argc, char* argv[])
             appRunning = false;
             fpv.shutdown();
         }
+        else if (command == "resetMappings")
+        {
+            fpv.clearIndicatorMappings();
+        }
+        else if (command == "clearIndicators")
+        {
+            fpv.removeAllIndicators();
+        }
     }
 }

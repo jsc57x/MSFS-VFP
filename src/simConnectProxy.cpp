@@ -92,22 +92,30 @@ void SimConnectProxy::handleCommand(AbstractCommandConfiguration* command)
             // remove all
             idsToRemove = getAllExistingIndicators();
         }
-
-        for (ushort id : idsToRemove)
-        {
-            uint existingObjectID = getSimObjectByIndicator(id);
-            if (existingObjectID != 0)
-            {
-                // FIXME: Not sure if we have to react on the completion of the request in message loop
-                SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
-                removeIndicatorMapping(id);
-            }
-        }
-
+        removeIndicators(idsToRemove);
     }
     else {
         Logger::logError("Unknown command.");
     }
+}
+
+void SimConnectProxy::removeIndicators(std::vector<ushort> indicatorsToRemove)
+{
+    for (ushort id : indicatorsToRemove)
+    {
+        uint existingObjectID = getSimObjectByIndicator(id);
+        if (existingObjectID != 0)
+        {
+            // FIXME: Not sure if we have to react on the completion of the request in message loop
+            SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
+            removeIndicatorMapping(id);
+        }
+    }
+}
+
+void SimConnectProxy::removeAllIndicators()
+{
+    removeIndicators(getAllExistingIndicators());
 }
 
 void SimConnectProxy::resetIndicatorTypeMapping()

@@ -54,6 +54,6 @@ public:
     std::vector<ushort> getIDsToRemove();
 
 private:
-    RemoveIndicatorsCommandConfiguration();
+    RemoveIndicatorsCommandConfiguration() {};
     std::vector<ushort> idsToRemove;
 };

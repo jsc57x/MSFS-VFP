@@ -24,6 +24,9 @@ public:
     void stopSimConnectProxy();
 
     void handleCommand(AbstractCommandConfiguration* command);
+
+    void removeAllIndicators();
+
     void resetIndicatorTypeMapping();
 
 private:
@@ -46,7 +49,6 @@ private:
 
     std::thread recvDataThread;
 
-
     bool isSimulationActive();
 
     void initIndicatorTypeMapping();
@@ -57,6 +59,7 @@ private:
     void setIndicatorToSimObject(uint requestID, uint simObjectID);
     uint getSimObjectByIndicator(ushort indicatorID);
     std::vector<ushort> getAllExistingIndicators();
+    void removeIndicators(std::vector<ushort> indicatorsToRemove);
     void removeIndicatorMapping(ushort indicatorID);
 
     void runSimConnectMessageLoop();

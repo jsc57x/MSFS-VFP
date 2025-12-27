@@ -93,6 +93,16 @@ void FlightPathVisualizer::handlePlaneUpdate(AircraftState* aircraftState)
     udpClient->sendPlaneStatus(aircraftState);
 }
 
+void FlightPathVisualizer::clearIndicatorMappings()
+{
+    simConnectProxy->resetIndicatorTypeMapping();
+}
+
+void FlightPathVisualizer::removeAllIndicators()
+{
+    simConnectProxy->removeAllIndicators();
+}
+
 void FlightPathVisualizer::shutdown()
 {
     udpServer->stopUDPServer();

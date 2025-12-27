@@ -16,6 +16,9 @@ public:
     void handleMessage(char* message, uint length) override;
     void handlePlaneUpdate(AircraftState* aircraftState) override;
 
+    void clearIndicatorMappings();
+    void removeAllIndicators();
+
 private:
     UDPServer* udpServer;
     UDPClient* udpClient;
