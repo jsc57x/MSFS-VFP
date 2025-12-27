@@ -110,6 +110,9 @@ void SimConnectProxy::removeIndicators(std::vector<ushort> indicatorsToRemove)
             SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
             removeIndicatorMapping(id);
         }
+        else {
+            Logger::logWarning("The indicator with ID " + std::to_string(id) + " cannot be removed because it is unknown.");
+        }
     }
 }
 
