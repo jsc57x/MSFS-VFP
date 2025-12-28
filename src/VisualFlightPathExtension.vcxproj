@@ -134,9 +134,8 @@
     <ClCompile Include="indicator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="simConnectProxy.cpp" />
-    <ClCompile Include="udpClient.cpp" />
     <ClCompile Include="udpCommand.cpp" />
-    <ClCompile Include="udpServer.cpp" />
+    <ClCompile Include="udpProxy.cpp" />
     <ClCompile Include="flightPathVisualizer.cpp" />
     <ClCompile Include="WorldPosition.cpp" />
   </ItemGroup>
@@ -146,9 +145,8 @@
     <ClInclude Include="datatypes.h" />
     <ClInclude Include="doubleHelper.h" />
     <ClInclude Include="log.h" />
-    <ClInclude Include="udpClient.h" />
     <ClInclude Include="udpCommand.h" />
-    <ClInclude Include="udpServer.h" />
+    <ClInclude Include="udpProxy.h" />
     <ClInclude Include="flightPathVisualizer.h" />
     <ClInclude Include="worldPosition.h" />
   </ItemGroup>

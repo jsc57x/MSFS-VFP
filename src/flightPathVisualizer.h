@@ -1,9 +1,8 @@
 #pragma once
 
 #include "datatypes.h"
-#include "udpServer.h"
+#include "udpProxy.h"
 #include "udpCommand.h"
-#include "udpClient.h"
 #include "simConnectProxy.h"
 
 #include <string>
@@ -21,7 +20,6 @@ public:
 
 private:
     UDPServer* udpServer;
-    UDPClient* udpClient;
     SimConnectProxy* simConnectProxy;
 
     std::unique_ptr<AbstractCommandConfiguration> parseIncomingMessage(char* array, uint length);

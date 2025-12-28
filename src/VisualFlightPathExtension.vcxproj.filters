@@ -18,7 +18,7 @@
     <ClCompile Include="flightPathVisualizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="udpServer.cpp">
+    <ClCompile Include="udpProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="console.cpp">
@@ -36,9 +36,6 @@
     <ClCompile Include="simConnectProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="udpClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AircraftState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -50,10 +47,7 @@
     <ClInclude Include="flightPathVisualizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="udpServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="udpClient.h">
+    <ClInclude Include="udpProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="console.h">

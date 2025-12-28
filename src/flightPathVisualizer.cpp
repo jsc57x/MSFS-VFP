@@ -10,11 +10,8 @@
 void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort targetPort)
 {
     udpServer = new UDPServer();
-    uint startUDPServRes = udpServer->startUDPServer(serverPort, this);
+    uint startUDPServRes = udpServer->startUDPServer(serverPort, this, targetIP, targetPort);
     //TODO Result auswerten
-
-    udpClient = new UDPClient();
-    udpClient->connect(targetIP, targetPort);
 
     simConnectProxy = new SimConnectProxy();
     simConnectProxy->startSimConnectProxy(this);
@@ -90,7 +87,7 @@ void FlightPathVisualizer::handlePlaneUpdate(AircraftState* aircraftState)
         " Pitch: " + std::to_string(aircraftState->getPitch()) +
         " Speed: " + std::to_string(aircraftState->getSpeed()));
 
-    udpClient->sendPlaneStatus(aircraftState);
+    udpServer->sendPlaneStatus(aircraftState);
 }
 
 void FlightPathVisualizer::clearIndicatorMappings()
@@ -106,7 +103,6 @@ void FlightPathVisualizer::removeAllIndicators()
 void FlightPathVisualizer::shutdown()
 {
     udpServer->stopUDPServer();
-    udpClient->disconnect();
     simConnectProxy->stopSimConnectProxy();
 }
 

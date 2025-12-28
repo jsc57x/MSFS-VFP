@@ -1,16 +1,22 @@
-#include "udpServer.h"
+#include "udpProxy.h"
+#include "aircraftState.h"
 #include "datatypes.h"
 #include "log.h"
 #include <iostream>
 #include <thread>
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <Windows.h>
 #include <chrono>
 
 #pragma comment(lib, "ws2_32.lib")
 
-uint UDPServer::startUDPServer(ushort udpPort, UDPMessageCallback* callback)
+uint UDPServer::startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort)
 {
+    targetAddr.sin_family = AF_INET;
+    targetAddr.sin_port = htons(targetPort);
+    inet_pton(AF_INET, targetIPAddress.c_str(), &targetAddr.sin_addr);
+
     sock = openUDPServerSocket(udpPort);
     serverThread = std::thread(&UDPServer::handleSocket, this, callback);
     return 0;
@@ -59,6 +65,35 @@ SOCKET UDPServer::openUDPServerSocket(ushort port)
     Logger::logInfo("UDP Port connected");
 
     return sock;
+}
+
+void UDPServer::sendPlaneStatus(AircraftState* aircraftState)
+{
+    int contentLength = 56;
+    char* rawContent = new char[contentLength] {};
+
+    double latitude = aircraftState->getLatitude();
+    double longitude = aircraftState->getLongitude();
+    double altitude = aircraftState->getAltitude();
+    double heading = aircraftState->getHeading();
+    double bank = aircraftState->getBank();
+    double pitch = aircraftState->getPitch();
+    double speed = aircraftState->getSpeed();
+
+    memcpy(rawContent, &latitude, sizeof(latitude));
+    memcpy(rawContent + 8, &longitude, sizeof(longitude));
+    memcpy(rawContent + 16, &altitude, sizeof(altitude));
+    memcpy(rawContent + 24, &heading, sizeof(heading));
+    memcpy(rawContent + 32, &bank, sizeof(bank));
+    memcpy(rawContent + 40, &pitch, sizeof(pitch));
+    memcpy(rawContent + 48, &speed, sizeof(speed));
+
+    int res = sendto(sock, rawContent, contentLength, 0, (sockaddr*)&targetAddr, sizeof(targetAddr));
+
+    if (res == SOCKET_ERROR)
+    {
+        Logger::logError("Failed to send aircraft information: " + std::to_string(WSAGetLastError()));
+    }
 }
 
 void UDPServer::closeUDPServerSocket()

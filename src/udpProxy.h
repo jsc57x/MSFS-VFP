@@ -1,6 +1,7 @@
 #pragma once
 
 #include "datatypes.h"
+#include "aircraftState.h"
 #include <string>
 #include <winsock2.h>
 #include <thread>
@@ -13,13 +14,16 @@ public:
 
 class UDPServer {
 public: 
-    uint startUDPServer(ushort udpPort, UDPMessageCallback* callback);
+    uint startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort);
+    void sendPlaneStatus(AircraftState* aircraftState);
     void stopUDPServer();
 
 private:
     bool isRunning;
     std::thread serverThread;
     SOCKET sock;
+
+    sockaddr_in targetAddr;
 
     SOCKET openUDPServerSocket(ushort port);
     void closeUDPServerSocket();
