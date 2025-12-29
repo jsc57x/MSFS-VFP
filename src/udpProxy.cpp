@@ -122,8 +122,15 @@ void UDPServer::handleSocket(UDPMessageCallback* callback)
         }
 
         if (recvLen == SOCKET_ERROR) { 
-            Logger::logError("Failed to handle incoming UDP message. WSA Error: " + std::to_string(WSAGetLastError()));
-            break;
+            uint lastErrorCode = WSAGetLastError();
+            if (lastErrorCode == 10054)
+            {
+                // this error code occurs if sendto could not reach the target host/port
+                // minor inconvenience in Windows Sockets
+                continue;
+            }
+            Logger::logError("Failed to handle incoming UDP message. WSA Error: " + std::to_string(lastErrorCode));
+            continue;
         }
 
         callback->handleMessage(buffer, recvLen);
