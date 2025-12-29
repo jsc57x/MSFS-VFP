@@ -20,8 +20,14 @@ bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
 
 void SimConnectProxy::subscribeToEvents()
 {
-    SimConnect_SubscribeToSystemEvent(hSimConnect, SIM_START, "SimStart");
-    SimConnect_SubscribeToSystemEvent(hSimConnect, SIM_STOP, "SimStop");
+    if (FAILED(SimConnect_SubscribeToSystemEvent(hSimConnect, SIM_START, "SimStart")))
+    {
+        Logger::logError("Failed to register for SIM_START");
+    }
+    if (FAILED(SimConnect_SubscribeToSystemEvent(hSimConnect, SIM_STOP, "SimStop")))
+    {
+        Logger::logError("Failed to register for SIM_STOP");
+    }
 
     // the simulation might be already running, so we have to poll once for the current state
     SimConnect_RequestSystemState(hSimConnect, SIM_STATE, "Sim");
@@ -241,7 +247,7 @@ void SimConnectProxy::removeIndicatorMapping(ushort indicatorID)
     indicatorToSimObject.erase(indicatorID);
 }
 
-void SimConnectProxy::runSimConnectMessageLoop()
+void SimConnectProxy::connectCore()
 {
     // as of dec 2025 there is a bug in SimConnect >= 1.4.5 (https://devsupport.flightsimulator.com/t/memory-leak-in-simconnect-open-function-sdk-1-4-5/17043)
     // so this only works with SimConnect SDK 1.2.4
@@ -251,6 +257,11 @@ void SimConnectProxy::runSimConnectMessageLoop()
     }
 
     subscribeToEvents();
+}
+
+void SimConnectProxy::runSimConnectMessageLoop()
+{
+    connectCore();
 
     isRunning = true;
     while (isRunning)
@@ -270,6 +281,10 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
 {
     switch (pData->dwID)
     {
+        // Simulation started and stopped events do not occur as expected
+        // According to https://docs.flightsimulator.com/msfs2024/html/6_Programming_APIs/SimConnect/API_Reference/Events_And_Data/SimConnect_SubscribeToSystemEvent.htm
+        // the system event SimStart should be send if the user is in control of an aircraft but it is also send when MSFS starts and is in main menu
+        // -> its currently seems impossible to determine the active running state of the simulation
        case SIMCONNECT_RECV_ID_EVENT : // Simulation started or stopped
        {
            SIMCONNECT_RECV_EVENT* evt = reinterpret_cast<SIMCONNECT_RECV_EVENT*>(pData);
@@ -312,6 +327,11 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
        }
        case SIMCONNECT_RECV_ID_SIMOBJECT_DATA: // polled aircraft information
        {
+           if (!isSimulationActive())
+           {
+               // The position will also be provided if the simulation is in menus :(
+               return;
+           }
            SIMCONNECT_RECV_SIMOBJECT_DATA* pObjData = (SIMCONNECT_RECV_SIMOBJECT_DATA*)pData;
            switch (pObjData->dwRequestID)
            {
@@ -320,6 +340,24 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
                this->callback->handlePlaneUpdate(new AircraftState(aircraftStateStruct));
                break;
            }
+           break;
+       }
+       case SIMCONNECT_RECV_ID_QUIT:
+       {
+           simulationIsActive.store(false, std::memory_order_release);
+
+           Logger::logInfo("SimConnect connection closed. Waiting for new connection.");
+           // clear all mappings
+
+           { // section for scoped lock
+               std::scoped_lock lk(indicatorToSimObjectMutex);
+               indicatorToSimObject.clear();
+           }
+
+           // waiting for new connection
+           connectCore();
+
+           Logger::logInfo("SimConnect connection reestablished.");
            break;
        }
     }

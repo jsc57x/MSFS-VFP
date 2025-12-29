@@ -62,6 +62,7 @@ private:
     void removeIndicators(std::vector<ushort> indicatorsToRemove);
     void removeIndicatorMapping(ushort indicatorID);
 
+    void connectCore();
     void runSimConnectMessageLoop();
     void subscribeToEvents();
     static void CALLBACK handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext);
@@ -73,7 +74,6 @@ private:
 enum EventIDs : uint {
     SIM_START = 1,
     SIM_STOP = 2,
-    PAUSE = 3,
 };
 
 enum ReservedRequestIDs : uint {
