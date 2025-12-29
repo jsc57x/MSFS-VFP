@@ -13,7 +13,7 @@ public:
     void shutdown();
 
     void handleMessage(char* message, uint length) override;
-    void handlePlaneUpdate(AircraftState* aircraftState) override;
+    void handlePlaneUpdate(AircraftState aircraftState) override;
 
     void clearIndicatorMappings();
     void removeAllIndicators();

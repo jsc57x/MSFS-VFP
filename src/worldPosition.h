@@ -14,14 +14,15 @@ class WorldPosition
 {
 public:
     WorldPosition(double latitude, double longitude, double altitude, double heading, double bank, double pitch);
-    WorldPosition(WorldPositionStruct* worldPositionStruct) : worldPositionStruct(worldPositionStruct) {};
+    explicit WorldPosition(const WorldPositionStruct& s) : worldPositionStruct(s) {}
+    virtual ~WorldPosition() = default;
 
-    double getLatitude();
-    double getLongitude();
-    double getAltitude();
-    double getHeading();
-    double getBank();
-    double getPitch();
-private:
-    WorldPositionStruct* worldPositionStruct;
+    double getLatitude() const;
+    double getLongitude() const;
+    double getAltitude() const;
+    double getHeading() const;
+    double getBank() const;
+    double getPitch() const;
+protected:
+    WorldPositionStruct worldPositionStruct;
 };

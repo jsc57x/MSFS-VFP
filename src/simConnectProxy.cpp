@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 
 bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
@@ -336,8 +337,10 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
            switch (pObjData->dwRequestID)
            {
            case AIRCRAFT_STATE:
-               AircraftStateStruct* aircraftStateStruct = (AircraftStateStruct*)&pObjData->dwData;
-               this->callback->handlePlaneUpdate(new AircraftState(aircraftStateStruct));
+               AircraftStateStruct tmp{};
+               std::memcpy(&tmp, &pObjData->dwData, sizeof(tmp));
+
+               this->callback->handlePlaneUpdate(AircraftState{ tmp });
                break;
            }
            break;

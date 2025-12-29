@@ -1,5 +1,6 @@
 #pragma once
 #include "worldPosition.h"
+#include <memory>
 
 struct AircraftStateStruct : WorldPositionStruct
 {
@@ -9,9 +10,12 @@ struct AircraftStateStruct : WorldPositionStruct
 class AircraftState : public WorldPosition
 {
 public:
-    AircraftState(AircraftStateStruct* stateStruct) : WorldPosition(static_cast<WorldPositionStruct*>(stateStruct)), state(stateStruct) {};
+    explicit AircraftState(const AircraftStateStruct& s)
+        : WorldPosition(static_cast<const WorldPositionStruct&>(s))
+        , state(s) {
+    }
 
-    double getSpeed();
+    double getSpeed() const;
 private:
-    AircraftStateStruct* state;
+    AircraftStateStruct state;
 };

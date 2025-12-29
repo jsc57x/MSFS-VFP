@@ -1,6 +1,6 @@
 #include "aircraftState.h"
 
-double AircraftState::getSpeed()
+double AircraftState::getSpeed() const
 {
-    return state->speed;
+    return state.speed;
 }

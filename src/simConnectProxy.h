@@ -15,7 +15,7 @@
 class SimConnectCallback {
 public:
     virtual ~SimConnectCallback() = default;
-    virtual void handlePlaneUpdate(AircraftState* aircraftState) = 0;
+    virtual void handlePlaneUpdate(AircraftState aircraftState) = 0;
 };
 
 class SimConnectProxy {

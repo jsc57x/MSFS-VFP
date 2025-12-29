@@ -67,18 +67,18 @@ SOCKET UDPServer::openUDPServerSocket(ushort port)
     return sock;
 }
 
-void UDPServer::sendPlaneStatus(AircraftState* aircraftState)
+void UDPServer::sendPlaneStatus(AircraftState aircraftState)
 {
     int contentLength = 56;
     char* rawContent = new char[contentLength] {};
 
-    double latitude = aircraftState->getLatitude();
-    double longitude = aircraftState->getLongitude();
-    double altitude = aircraftState->getAltitude();
-    double heading = aircraftState->getHeading();
-    double bank = aircraftState->getBank();
-    double pitch = aircraftState->getPitch();
-    double speed = aircraftState->getSpeed();
+    double latitude = aircraftState.getLatitude();
+    double longitude = aircraftState.getLongitude();
+    double altitude = aircraftState.getAltitude();
+    double heading = aircraftState.getHeading();
+    double bank = aircraftState.getBank();
+    double pitch = aircraftState.getPitch();
+    double speed = aircraftState.getSpeed();
 
     memcpy(rawContent, &latitude, sizeof(latitude));
     memcpy(rawContent + 8, &longitude, sizeof(longitude));
@@ -94,6 +94,8 @@ void UDPServer::sendPlaneStatus(AircraftState* aircraftState)
     {
         Logger::logError("Failed to send aircraft information: " + std::to_string(WSAGetLastError()));
     }
+
+    delete rawContent;
 }
 
 void UDPServer::closeUDPServerSocket()
