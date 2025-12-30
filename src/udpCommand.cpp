@@ -1,6 +1,5 @@
 #include "udpCommand.h"
 #include "flightPathVisualizer.h"
-#include "indicator.h"
 #include "log.h"
 #include "doubleHelper.h"
 
