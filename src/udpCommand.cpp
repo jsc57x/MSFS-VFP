@@ -150,6 +150,21 @@ std::vector<ushort> RemoveIndicatorsCommandConfiguration::getIDsToRemove()
 
 std::string RemoveIndicatorsCommandConfiguration::toString()
 {
-    // FIXME
-    return "";
+    if (idsToRemove.size() == 0)
+    {
+        return "Delete all indicators.";
+    }
+
+    std::string msg = "Delete indicators: ";
+
+    for (uint i = 0; i < idsToRemove.size(); i++)
+    {
+        msg = msg + std::to_string(idsToRemove.at(i));
+        if(i + 1 != idsToRemove.size()) {
+            msg = msg + ", ";
+        }
+        
+    }
+
+    return msg;
 }

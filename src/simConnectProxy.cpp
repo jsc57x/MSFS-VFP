@@ -83,7 +83,6 @@ void SimConnectProxy::handleCommand(AbstractCommandConfiguration* command)
         uint existingObjectID = getSimObjectByIndicator(setCommand->getID());
         if (existingObjectID != 0)
         {
-            // FIXME: Not sure if we have to react on the completion of the request in message loop
             SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
         }
 
@@ -113,7 +112,6 @@ void SimConnectProxy::removeIndicators(std::vector<ushort> indicatorsToRemove)
         uint existingObjectID = getSimObjectByIndicator(id);
         if (existingObjectID != 0)
         {
-            // FIXME: Not sure if we have to react on the completion of the request in message loop
             SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
             removeIndicatorMapping(id);
         }
@@ -295,9 +293,6 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
                 {
                     Logger::logInfo("Simulation started");
                     simulationIsActive.store(true, std::memory_order_release);
-
-                    //FIXME Datenbank clearen
-
                     break;
                 }
                 case SIM_STOP:

@@ -35,7 +35,6 @@ private:
     
     std::unordered_map<ulong, std::string> indicatorTypeMapping;
 
-    //FIXME: Value will be set (and maybe requested) with the plane information (via message dispatch)
     std::atomic_bool isRunning{ false };
     std::atomic_bool simulationIsActive{ false };
     // FIXME if there are more then ~2^32 requests this will finally become 1 and interfere with the reserved IDs

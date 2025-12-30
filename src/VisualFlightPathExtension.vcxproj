@@ -131,7 +131,6 @@
   <ItemGroup>
     <ClCompile Include="AircraftState.cpp" />
     <ClCompile Include="console.cpp" />
-    <ClCompile Include="indicator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="simConnectProxy.cpp" />
     <ClCompile Include="udpCommand.cpp" />
