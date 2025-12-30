@@ -393,7 +393,7 @@ char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out
 
     *out_len = sizeof(short) * (splittedRow.size() - 1) + 2;
     
-    char* rawContent = new char[1024] {};
+    char* rawContent = new char[2048] {}; // for tests this buffer has to be larger than the input buffer in VFP
 
     memcpy(rawContent, &commandID, sizeof(commandID));
 

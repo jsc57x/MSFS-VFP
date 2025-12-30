@@ -125,10 +125,13 @@ void UDPServer::handleSocket(UDPMessageCallback* callback)
 
         if (recvLen == SOCKET_ERROR) { 
             uint lastErrorCode = WSAGetLastError();
-            if (lastErrorCode == 10054)
-            {
+            if (lastErrorCode == WSAECONNRESET) {
                 // this error code occurs if sendto could not reach the target host/port
                 // minor inconvenience in Windows Sockets
+                continue;
+            }
+            else if (lastErrorCode == WSAEMSGSIZE) {
+                Logger::logError("Message size is more than 1024 Bytes. Message ignored!");
                 continue;
             }
             Logger::logError("Failed to handle incoming UDP message. WSA Error: " + std::to_string(lastErrorCode));
