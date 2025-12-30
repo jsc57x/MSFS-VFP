@@ -77,13 +77,13 @@ void SimConnectProxy::handleCommand(AbstractCommandConfiguration* command)
         pos.Airspeed = 0;
         pos.OnGround = 0;
 
-        uint requestID = nextRequestID.fetch_add(1);
+        uint requestID = getNextRequestID();
         setRequestToIndicator(requestID, setCommand->getID());
 
         uint existingObjectID = getSimObjectByIndicator(setCommand->getID());
         if (existingObjectID != 0)
         {
-            SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
+            SimConnect_AIRemoveObject(hSimConnect, existingObjectID, getNextRequestID());
         }
 
         SimConnect_AICreateSimulatedObject_EX1(hSimConnect, indicatorType.c_str(), nullptr, pos, requestID);
@@ -112,7 +112,7 @@ void SimConnectProxy::removeIndicators(std::vector<ushort> indicatorsToRemove)
         uint existingObjectID = getSimObjectByIndicator(id);
         if (existingObjectID != 0)
         {
-            SimConnect_AIRemoveObject(hSimConnect, existingObjectID, nextRequestID.fetch_add(1));
+            SimConnect_AIRemoveObject(hSimConnect, existingObjectID, getNextRequestID());
             removeIndicatorMapping(id);
         }
         else {
@@ -185,6 +185,18 @@ std::string SimConnectProxy::getIndicatorTypeName(ulong indicatorTypeID)
 bool SimConnectProxy::isSimulationActive()
 {
     return simulationIsActive.load(std::memory_order_acquire);
+}
+
+int SimConnectProxy::getNextRequestID()
+{
+    int nextID = nextRequestID.fetch_add(1);
+    if (nextID <= 0)
+    {
+        nextID = 1000;
+        nextRequestID.store(nextID);
+
+    }
+    return nextID;
 }
 
 void SimConnectProxy::stopSimConnectProxy()
@@ -299,6 +311,7 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
                 {
                     Logger::logInfo("Simulation stopped");
                     simulationIsActive.store(false, std::memory_order_release);
+                    removeAllIndicators();
                     break;
                 }
            }

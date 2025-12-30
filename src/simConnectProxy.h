@@ -37,7 +37,6 @@ private:
 
     std::atomic_bool isRunning{ false };
     std::atomic_bool simulationIsActive{ false };
-    // FIXME if there are more then ~2^32 requests this will finally become 1 and interfere with the reserved IDs
     std::atomic_int nextRequestID{ 1000 }; // < 1000 will be reserved for system events that are actively polled by this application
 
     std::unordered_map<uint, ushort> requestToIndicator;
@@ -49,6 +48,8 @@ private:
     std::thread recvDataThread;
 
     bool isSimulationActive();
+
+    int getNextRequestID();
 
     void initIndicatorTypeMapping();
     const std::unordered_map<ulong, std::string>& getIndicatorTypeMapping();
