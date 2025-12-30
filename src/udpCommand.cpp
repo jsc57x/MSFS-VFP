@@ -12,18 +12,6 @@
 #define LONGITUDE_MIN -180.0
 #define LONGITUDE_MAX 180.0
 
-#define ALTITUDE_MIN 0.0
-#define ALTITUDE_MAX 1000000 // TODO What is max height???
-
-#define HEADING_MIN -360.0
-#define HEADING_MAX 360.0
-
-#define BANK_MIN -360.0
-#define BANK_MAX 360.0
-
-#define PITCH_MIN -360.0
-#define PITCH_MAX 360.0
-
 //////////////
 ///   SET  ///
 //////////////
@@ -75,26 +63,6 @@ bool SetIndicatorCommandConfiguration::validate()
         Logger::logError("Longitude is out of range: " + std::to_string(position.getLongitude()));
         return false;
     }
-
-/*    if (!isDoubleInRange(altitude, ALTITUDE_MIN, ALTITUDE_MAX))
-    {
-        Logger::logError("Altitude is out of range: " + std::to_string(altitude));
-    }
-
-    if (!isDoubleInRange(heading, HEADING_MIN, HEADING_MAX))
-    {
-        Logger::logError("Heading is out of range: " + std::to_string(heading));
-    }
-
-    if (!isDoubleInRange(bank, BANK_MIN, BANK_MAX))
-    {
-        Logger::logError("Bank is out of range: " + std::to_string(bank));
-    }
-
-    if (!isDoubleInRange(pitch, PITCH_MIN, PITCH_MAX))
-    {
-        Logger::logError("Pitch is out of range: " + std::to_string(pitch));
-    }   */ 
 
     return true;
 }

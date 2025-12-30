@@ -10,8 +10,13 @@
 void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort targetPort)
 {
     udpServer = new UDPServer();
-    uint startUDPServRes = udpServer->startUDPServer(serverPort, this, targetIP, targetPort);
-    //TODO Result auswerten
+    bool startUDPServRes = udpServer->startUDPServer(serverPort, this, targetIP, targetPort);
+
+    if (!startUDPServRes)
+    {
+        Logger::logError("Failed to start UDP Connection. Abort.");
+        return;
+    }
 
     simConnectProxy = new SimConnectProxy();
     simConnectProxy->startSimConnectProxy(this);

@@ -11,15 +11,21 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-uint UDPServer::startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort)
+bool UDPServer::startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort)
 {
     targetAddr.sin_family = AF_INET;
     targetAddr.sin_port = htons(targetPort);
     inet_pton(AF_INET, targetIPAddress.c_str(), &targetAddr.sin_addr);
 
     sock = openUDPServerSocket(udpPort);
+
+    if (sock == INVALID_SOCKET)
+    {
+        return false;
+    }
+
     serverThread = std::thread(&UDPServer::handleSocket, this, callback);
-    return 0;
+    return true;
 }
 
 void UDPServer::stopUDPServer()

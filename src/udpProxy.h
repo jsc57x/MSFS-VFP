@@ -14,7 +14,7 @@ public:
 
 class UDPServer {
 public: 
-    uint startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort);
+    bool startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort);
     void sendPlaneStatus(AircraftState aircraftState);
     void stopUDPServer();
 
