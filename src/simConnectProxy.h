@@ -67,8 +67,6 @@ private:
     void subscribeToEvents();
     static void CALLBACK handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext);
     void handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD cbData);
-
-    std::vector<std::string> splitString(const std::string& s, char delimiter);
 };
 
 enum EventIDs : uint {

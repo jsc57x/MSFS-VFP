@@ -1,5 +1,6 @@
 #include "simConnectProxy.h"
 #include "log.h"
+#include "stringHelper.h"
 
 #include "SimConnect.h"
 #include <map>
@@ -284,7 +285,7 @@ void SimConnectProxy::runSimConnectMessageLoop()
 
 void CALLBACK SimConnectProxy::handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
 {
-    auto* self = static_cast<SimConnectProxy*>(pContext);
+    SimConnectProxy* self = static_cast<SimConnectProxy*>(pContext);
     if (self) self->handleSimConnectMessageCore(pData, cbData);
 }
 
@@ -374,15 +375,3 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
     }
 }
 
-std::vector<std::string> SimConnectProxy::splitString(const std::string& s, char delimiter)
-{
-    std::vector<std::string> tokens;
-    std::stringstream ss(s);
-    std::string part;
-
-    while (std::getline(ss, part, delimiter)) {
-        tokens.push_back(part);
-    }
-
-    return tokens;
-}

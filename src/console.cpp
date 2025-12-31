@@ -19,6 +19,11 @@ void printHelp(ushort defaultReceivingPort, std::string defaultTargetIP, ushort 
     std::cout << "\t-tp\tTarget UDP port ([1-65535], default: " << (int)defaultTargetPort << ")" << std::endl;
 }
 
+void Logger::logMessage(std::string message)
+{
+    printMessage(message);
+}
+
 void Logger::logInfo(std::string message)
 {
     printInfo(message);
@@ -32,6 +37,11 @@ void Logger::logWarning(std::string message)
 void Logger::logError(std::string message)
 {
     printError(message);
+}
+
+void printMessage(std::string message)
+{
+    std::cout << message << std::endl;
 }
 
 void printInfo(std::string message)

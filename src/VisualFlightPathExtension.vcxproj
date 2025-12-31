@@ -144,6 +144,7 @@
     <ClInclude Include="datatypes.h" />
     <ClInclude Include="doubleHelper.h" />
     <ClInclude Include="log.h" />
+    <ClInclude Include="stringHelper.h" />
     <ClInclude Include="udpCommand.h" />
     <ClInclude Include="udpProxy.h" />
     <ClInclude Include="flightPathVisualizer.h" />

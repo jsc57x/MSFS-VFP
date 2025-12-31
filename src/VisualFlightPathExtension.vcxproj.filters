@@ -68,6 +68,9 @@
     <ClInclude Include="worldPosition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stringHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="simConnectProxy.h">

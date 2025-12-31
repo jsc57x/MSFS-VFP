@@ -4,11 +4,11 @@
 
 #define DOUBLE_PRECISION 0.0000000001
 
-bool areDoubleEqual(double a, double b) {
+inline bool areDoubleEqual(double a, double b) {
     return fabs(a - b) < DOUBLE_PRECISION;
 }
 
-bool isDoubleInRange(double value, double min, double max)
+inline bool isDoubleInRange(double value, double min, double max)
 {
     if (min > max) std::swap(min, max);
 
