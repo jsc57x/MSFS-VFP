@@ -19,11 +19,32 @@
 #pragma once
 
 #include <string>
-
+/// <summary>
+/// Contains static methods to log messages.
+/// </summary>
 class Logger {
 public:
+    /// <summary>
+    /// Logs messages in "normal" style.
+    /// </summary>
+    /// <param name="message">The message to be logged</param>
     static void logMessage(std::string message);
+
+    /// <summary>
+    /// Logs messages with log level info.
+    /// </summary>
+    /// <param name="message">The message to be logged</param>
     static void logInfo(std::string message);
+
+    /// <summary>
+    /// Logs messages with log level warning.
+    /// </summary>
+    /// <param name="message">The message to be logged</param>
     static void logWarning(std::string message);
+
+    /// <summary>
+    /// Logs messages with log level error.
+    /// </summary>
+    /// <param name="message">The message to be logged</param>
     static void logError(std::string message);
 };

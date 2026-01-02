@@ -18,13 +18,39 @@
  */
 #pragma once
 
+#include "datatypes.h"
 #include <string>
 
-#include "datatypes.h"
+/// Contains helper methods for printing on the console
 
+/// <summary>
+/// Prints the help text.
+/// </summary>
+/// <param name="defaultReceivingPort">Default port for incoming requests</param>
+/// <param name="defaultTargetIP">Default target IP address for outgoing requests</param>
+/// <param name="defaultTargetPort">Default port for outgoing requests</param>
 void printHelp(ushort defaultReceivingPort, std::string defaultTargetIP, ushort defaultTargetPort);
 
+/// <summary>
+/// Prints a "normal" message on the console.
+/// </summary>
+/// <param name="message">The message to show on console</param>
 void printMessage(std::string message);
+
+/// <summary>
+/// Prints a message in info color on the console.
+/// </summary>
+/// <param name="message">The message to show on console</param>
 void printInfo(std::string message);
+
+/// <summary>
+/// Prints a message in warning color on the console.
+/// </summary>
+/// <param name="message">The message to show on console</param>
 void printWarning(std::string message);
+
+/// <summary>
+/// Prints a message in error color on the console.
+/// </summary>
+/// <param name="message">The message to show on console</param>
 void printError(std::string message);

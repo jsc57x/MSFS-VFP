@@ -20,12 +20,26 @@
 
 #include <math.h>
 
+/// The precision threshold for double values
 #define DOUBLE_PRECISION 0.0000000001
 
+/// <summary>
+/// Compares two double values if they are equals according to the used double precision.
+/// </summary>
+/// <param name="a">First value</param>
+/// <param name="b">Second value</param>
+/// <returns>true if the difference between the given values is smaller then the double precision</returns>
 inline bool areDoubleEqual(double a, double b) {
     return fabs(a - b) < DOUBLE_PRECISION;
 }
 
+/// <summary>
+/// Checks if the given value is within the given min and max values.
+/// </summary>
+/// <param name="value">The value to be tested</param>
+/// <param name="min">Lower border</param>
+/// <param name="max">Upper border</param>
+/// <returns>true if the value is within min and max with respect to the double precision</returns>
 inline bool isDoubleInRange(double value, double min, double max)
 {
     if (min > max) std::swap(min, max);

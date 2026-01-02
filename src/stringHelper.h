@@ -22,6 +22,14 @@
 #include<sstream>
 #include<vector>
 
+/// Contains necessary helper methods for string operations
+
+/// <summary>
+/// Splits the given string on every occurence of the given delimiter.
+/// </summary>
+/// <param name="s">The string to be split</param>
+/// <param name="delimiter">The delimiter</param>
+/// <returns>The seperated string values</returns>
 inline std::vector<std::string> splitString(const std::string& s, char delimiter)
 {
     std::vector<std::string> tokens;

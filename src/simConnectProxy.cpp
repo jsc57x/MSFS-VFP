@@ -29,13 +29,11 @@
 #include <memory>
 
 
-bool SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
+void SimConnectProxy::startSimConnectProxy(SimConnectCallback* callback)
 {
     this->callback = callback;
 
     recvDataThread = std::thread(&SimConnectProxy::runSimConnectMessageLoop, this);
-
-    return 0;
 }
 
 void SimConnectProxy::subscribeToEvents()
@@ -304,10 +302,10 @@ void SimConnectProxy::runSimConnectMessageLoop()
 void CALLBACK SimConnectProxy::handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
 {
     SimConnectProxy* self = static_cast<SimConnectProxy*>(pContext);
-    if (self) self->handleSimConnectMessageCore(pData, cbData);
+    if (self) self->handleSimConnectMessageCore(pData);
 }
 
-void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD cbData)
+void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData)
 {
     switch (pData->dwID)
     {
@@ -367,7 +365,7 @@ void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData, DWORD 
                AircraftStateStruct tmp{};
                std::memcpy(&tmp, &pObjData->dwData, sizeof(tmp));
 
-               this->callback->handlePlaneUpdate(AircraftState{ tmp });
+               this->callback->handleAircraftStateUpdate(AircraftState{ tmp });
                break;
            }
            break;

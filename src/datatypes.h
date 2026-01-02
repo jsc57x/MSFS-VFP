@@ -18,6 +18,8 @@
  */
 #pragma once
 
+/// Contains data definitions (e.g. abbreviations for unsigned integer types) 
+
 //general
 typedef unsigned char uchar;
 typedef unsigned short ushort;

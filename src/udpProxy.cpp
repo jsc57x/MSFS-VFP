@@ -29,50 +29,50 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-bool UDPServer::startUDPServer(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort)
+bool UDPProxy::startUDPProxy(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort)
 {
     targetAddr.sin_family = AF_INET;
     targetAddr.sin_port = htons(targetPort);
     inet_pton(AF_INET, targetIPAddress.c_str(), &targetAddr.sin_addr);
 
-    sock = openUDPServerSocket(udpPort);
+    openUDPSocket(udpPort);
 
     if (sock == INVALID_SOCKET)
     {
         return false;
     }
 
-    serverThread = std::thread(&UDPServer::handleSocket, this, callback);
+    serverThread = std::thread(&UDPProxy::handleSocket, this, callback);
     return true;
 }
 
-void UDPServer::stopUDPServer()
+void UDPProxy::stopUDPProxy()
 {
     isRunning = false;
-    closeUDPServerSocket();
+    closeUDPSocket();
 
     // Waiting for thread to finish
     serverThread.join();
 }
 
-SOCKET UDPServer::openUDPServerSocket(ushort port)
+void UDPProxy::openUDPSocket(ushort port)
 {
     WSADATA wsaData;
-    SOCKET sock = INVALID_SOCKET;
+    sock = INVALID_SOCKET;
     struct sockaddr_in serverAddr;
 
     Logger::logInfo(("Connecting to UDP port " + std::to_string(port) + "...").c_str());
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         Logger::logError("WSAStartup failed.");
-        return 1;
+        return;
     }
 
     sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock == INVALID_SOCKET) {
         Logger::logError("Create socket failed. WSA Error: " + WSAGetLastError());
         WSACleanup();
-        return 1;
+        return;
     }
 
     serverAddr.sin_family = AF_INET;
@@ -83,52 +83,29 @@ SOCKET UDPServer::openUDPServerSocket(ushort port)
         Logger::logError("Failed to bind to socket. WSA Error: " + WSAGetLastError());
         closesocket(sock);
         WSACleanup();
-        return 1;
+        return;
     }
 
     Logger::logInfo("UDP Port connected");
-
-    return sock;
 }
 
-void UDPServer::sendPlaneStatus(AircraftState aircraftState)
+void UDPProxy::sendData(char* rawData, uint length)
 {
-    int contentLength = 56;
-    char* rawContent = new char[contentLength] {};
-
-    double latitude = aircraftState.getLatitude();
-    double longitude = aircraftState.getLongitude();
-    double altitude = aircraftState.getAltitude();
-    double heading = aircraftState.getHeading();
-    double bank = aircraftState.getBank();
-    double pitch = aircraftState.getPitch();
-    double speed = aircraftState.getSpeed();
-
-    memcpy(rawContent, &latitude, sizeof(latitude));
-    memcpy(rawContent + 8, &longitude, sizeof(longitude));
-    memcpy(rawContent + 16, &altitude, sizeof(altitude));
-    memcpy(rawContent + 24, &heading, sizeof(heading));
-    memcpy(rawContent + 32, &bank, sizeof(bank));
-    memcpy(rawContent + 40, &pitch, sizeof(pitch));
-    memcpy(rawContent + 48, &speed, sizeof(speed));
-
-    int res = sendto(sock, rawContent, contentLength, 0, (sockaddr*)&targetAddr, sizeof(targetAddr));
+    int res = sendto(sock, rawData, length, 0, (sockaddr*)&targetAddr, sizeof(targetAddr));
 
     if (res == SOCKET_ERROR)
     {
         Logger::logError("Failed to send aircraft information: " + std::to_string(WSAGetLastError()));
     }
-
-    delete rawContent;
 }
 
-void UDPServer::closeUDPServerSocket()
+void UDPProxy::closeUDPSocket()
 {
     closesocket(sock);
     WSACleanup();
 }
 
-void UDPServer::handleSocket(UDPMessageCallback* callback)
+void UDPProxy::handleSocket(UDPMessageCallback* callback)
 {
     struct sockaddr_in clientAddr;
     char buffer[1024];

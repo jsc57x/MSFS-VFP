@@ -27,8 +27,8 @@
 
 void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort targetPort)
 {
-    udpServer = new UDPServer();
-    bool startUDPServRes = udpServer->startUDPServer(serverPort, this, targetIP, targetPort);
+    udpServer = new UDPProxy();
+    bool startUDPServRes = udpServer->startUDPProxy(serverPort, this, targetIP, targetPort);
 
     if (!startUDPServRes)
     {
@@ -57,15 +57,17 @@ std::unique_ptr<AbstractCommandConfiguration> FlightPathVisualizer::parseIncomin
 {
     if (length < sizeof(ushort))
     {
-        handleInvalidMessage("missing command", messageContent, length);
+        Logger::logError("Received invalid message (missing command): " + std::string(messageContent, length));
     }
+
     ushort commandID;
     memcpy(&commandID, messageContent, sizeof(ushort));
 
     // this has to be improved if there are more than two commands
     if (commandID != 1 && commandID != 2)
     {
-        handleInvalidMessage("invalid command id " + std::to_string(commandID), messageContent, length);
+        Logger::logError("Received invalid message (invalid command id " + std::to_string(commandID) + "): " + std::string(messageContent, length));
+
     }
 
     // these should be constants
@@ -85,7 +87,7 @@ std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSet
 {
     if (length != 56)
     {
-        handleInvalidMessage("Invalid message length for Set command", message, length);
+        Logger::logError("Received invalid message (Invalid message length for Set command): " + std::string(message, length));
     }
     return SetIndicatorCommandConfiguration::parse(message);
 }
@@ -95,12 +97,7 @@ std::unique_ptr<RemoveIndicatorsCommandConfiguration> FlightPathVisualizer::pars
     return RemoveIndicatorsCommandConfiguration::parse(message, length);
 }
 
-void FlightPathVisualizer::handleInvalidMessage(std::string errorMsg, char* message, uint length)
-{
-    Logger::logError("Received invalid message (" + errorMsg + "): " + std::string(message, length));
-}
-
-void FlightPathVisualizer::handlePlaneUpdate(AircraftState aircraftState)
+void FlightPathVisualizer::handleAircraftStateUpdate(AircraftState aircraftState)
 {
     Logger::logInfo("Aircraft state received: Latitude: " + std::to_string(aircraftState.getLatitude()) +
         " Longitude: " + std::to_string(aircraftState.getLongitude()) +
@@ -110,7 +107,28 @@ void FlightPathVisualizer::handlePlaneUpdate(AircraftState aircraftState)
         " Pitch: " + std::to_string(aircraftState.getPitch()) +
         " Speed: " + std::to_string(aircraftState.getSpeed()));
 
-    udpServer->sendPlaneStatus(aircraftState);
+    int contentLength = 56;
+    char* rawContent = new char[contentLength] {};
+
+    double latitude = aircraftState.getLatitude();
+    double longitude = aircraftState.getLongitude();
+    double altitude = aircraftState.getAltitude();
+    double heading = aircraftState.getHeading();
+    double bank = aircraftState.getBank();
+    double pitch = aircraftState.getPitch();
+    double speed = aircraftState.getSpeed();
+
+    memcpy(rawContent, &latitude, sizeof(latitude));
+    memcpy(rawContent + 8, &longitude, sizeof(longitude));
+    memcpy(rawContent + 16, &altitude, sizeof(altitude));
+    memcpy(rawContent + 24, &heading, sizeof(heading));
+    memcpy(rawContent + 32, &bank, sizeof(bank));
+    memcpy(rawContent + 40, &pitch, sizeof(pitch));
+    memcpy(rawContent + 48, &speed, sizeof(speed));
+
+    udpServer->sendData(rawContent, contentLength);
+
+    delete[] rawContent;
 }
 
 void FlightPathVisualizer::clearIndicatorMappings()
@@ -125,7 +143,7 @@ void FlightPathVisualizer::removeAllIndicators()
 
 void FlightPathVisualizer::shutdown()
 {
-    udpServer->stopUDPServer();
+    udpServer->stopUDPProxy();
     simConnectProxy->stopSimConnectProxy();
 }
 

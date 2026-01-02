@@ -20,20 +20,42 @@
 #include "worldPosition.h"
 #include <memory>
 
+
+/// <summary>
+/// Data structure representing the position, orientation, and speed of an simulated aircraft.
+/// </summary>
 struct AircraftStateStruct : WorldPositionStruct
 {
+    /// <summary>
+    /// Aircraft speed in knots (kts)
+    /// </summary>
     double speed;
 };
 
+/// <summary>
+/// Represents the position, orientation and speed of an simulated aircraft.
+/// </summary>
 class AircraftState : public WorldPosition
 {
 public:
+    /// <summary>
+    /// Constructs an aircraft state from an aircraft state structure.
+    /// </summary>
+    /// <param name="s">Aircraft state structure containing position, orientation, and speed</param>
     explicit AircraftState(const AircraftStateStruct& s)
         : WorldPosition(static_cast<const WorldPositionStruct&>(s))
-        , state(s) {
-    }
+        , state(s) {}
 
+
+    /// <summary>
+    /// Returns the aircraft speed in knots (kts)
+    /// </summary>
+    /// <returns>Aircraft speed</returns>
     double getSpeed() const;
+
 private:
+    /// <summary>
+    /// Encapsulated struct for communication with SimConnect-API
+    /// </summary>
     AircraftStateStruct state;
 };
