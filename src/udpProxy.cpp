@@ -29,7 +29,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-bool UDPProxy::startUDPProxy(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort)
+bool UDPProxy::startUDPProxy(ushort udpPort, UDPProxyCallback* callback, std::string targetIPAddress, ushort targetPort)
 {
     targetAddr.sin_family = AF_INET;
     targetAddr.sin_port = htons(targetPort);
@@ -105,7 +105,7 @@ void UDPProxy::closeUDPSocket()
     WSACleanup();
 }
 
-void UDPProxy::handleSocket(UDPMessageCallback* callback)
+void UDPProxy::handleSocket(UDPProxyCallback* callback)
 {
     struct sockaddr_in clientAddr;
     char buffer[1024];

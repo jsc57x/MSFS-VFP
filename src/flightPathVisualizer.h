@@ -28,7 +28,7 @@
 /// <summary>
 /// Main class which controls and processes the data flow between SimConnectProxy and UDPProxy.
 /// </summary>
-class FlightPathVisualizer : public UDPMessageCallback, public SimConnectCallback{
+class FlightPathVisualizer : public UDPProxyCallback, public SimConnectCallback{
 public:
     /// <summary>
     /// Starts the procssing of incoming UDP data traffic and SimConnect status updates.
@@ -60,7 +60,7 @@ private:
     /// <summary>
     /// The UDP Proxy for receiving and sending data over a UDP socket.
     /// </summary>
-    UDPProxy* udpServer;
+    UDPProxy* udpProxy;
 
     /// <summary>
     /// The SimConnect Proxy for data exchange with a running SimConnect application.

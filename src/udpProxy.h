@@ -27,12 +27,12 @@
 /// <summary>
 /// Callback for incoming messages to show or remove indicators.
 /// </summary>
-class UDPMessageCallback {
+class UDPProxyCallback {
 public:
     /// <summary>
     /// Virtual destructor
     /// </summary>
-    virtual ~UDPMessageCallback() = default;
+    virtual ~UDPProxyCallback() = default;
 
     /// <summary>
     /// Handles an incoming message.
@@ -56,7 +56,7 @@ public:
     /// <param name="targetIPAddress">Target IP address for outgoing data</param>
     /// <param name="targetPort">Target port number for outgoing data</param>
     /// <returns></returns>
-    bool startUDPProxy(ushort udpPort, UDPMessageCallback* callback, std::string targetIPAddress, ushort targetPort);
+    bool startUDPProxy(ushort udpPort, UDPProxyCallback* callback, std::string targetIPAddress, ushort targetPort);
 
     /// <summary>
     /// Sends the given data to the target for outgoing data.
@@ -106,5 +106,5 @@ private:
     /// Handles the loop for incoming messages. Returns after closeUDPSocket was called.
     /// </summary>
     /// <param name="callback">The callback to handle incoming messages</param>
-    void handleSocket(UDPMessageCallback* callback);
+    void handleSocket(UDPProxyCallback* callback);
 };

@@ -335,7 +335,7 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
         char* rawContent = createSetIndicator(indicatorID, indicatorTypeID, setLatitude, setLongitude, setAltitude, setHeading, setBank, setPitch, &length);
         sendData(target, addr, rawContent, length);
 
-        delete rawContent;
+        delete[] rawContent;
     }
 }
 

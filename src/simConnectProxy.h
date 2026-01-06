@@ -230,14 +230,6 @@ private:
     /// Subscribes to SimConnect system events and updated aircraft information.
     /// </summary>
     void subscribeToEvents();
-    
-    /// <summary>
-    /// Proxy method to send SimConnect messages to the SimConnectProxy instance.
-    /// </summary>
-    /// <param name="pData">Pointer to the data buffer</param>
-    /// <param name="cbData">Pointer to the size of the data buffer</param>
-    /// <param name="pContext">The "context" which is the instance of SimConnectProxy</param>
-    static void CALLBACK handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext);
 
     /// <summary>
     /// Core method to handle the SimConnect message.

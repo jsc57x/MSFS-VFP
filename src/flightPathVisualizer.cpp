@@ -27,8 +27,8 @@
 
 void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort targetPort)
 {
-    udpServer = new UDPProxy();
-    bool startUDPServRes = udpServer->startUDPProxy(serverPort, this, targetIP, targetPort);
+    udpProxy = new UDPProxy();
+    bool startUDPServRes = udpProxy->startUDPProxy(serverPort, this, targetIP, targetPort);
 
     if (!startUDPServRes)
     {
@@ -126,7 +126,7 @@ void FlightPathVisualizer::handleAircraftStateUpdate(AircraftState aircraftState
     memcpy(rawContent + 40, &pitch, sizeof(pitch));
     memcpy(rawContent + 48, &speed, sizeof(speed));
 
-    udpServer->sendData(rawContent, contentLength);
+    udpProxy->sendData(rawContent, contentLength);
 
     delete[] rawContent;
 }
@@ -143,7 +143,7 @@ void FlightPathVisualizer::removeAllIndicators()
 
 void FlightPathVisualizer::shutdown()
 {
-    udpServer->stopUDPProxy();
+    udpProxy->stopUDPProxy();
     simConnectProxy->stopSimConnectProxy();
 }
 

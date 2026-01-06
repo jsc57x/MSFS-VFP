@@ -292,17 +292,27 @@ void SimConnectProxy::runSimConnectMessageLoop()
     connectCore();
 
     isRunning = true;
+    
+    SIMCONNECT_RECV* pData;
+    DWORD cbData;
+    HRESULT res;
+
     while (isRunning)
     {
-        SimConnect_CallDispatch(hSimConnect, SimConnectProxy::handleSimConnectMessage, this);
-        Sleep(1);
-    }
-}
+        res = SimConnect_GetNextDispatch(hSimConnect, &pData, &cbData);
 
-void CALLBACK SimConnectProxy::handleSimConnectMessage(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
-{
-    SimConnectProxy* self = static_cast<SimConnectProxy*>(pContext);
-    if (self) self->handleSimConnectMessageCore(pData);
+        if (res == E_FAIL)
+        {
+            //no Message in the queue -> wait and continue
+            Sleep(1);
+            continue;
+        }
+
+        if (SUCCEEDED(res))
+        {
+            handleSimConnectMessageCore(pData);
+        }
+    }
 }
 
 void SimConnectProxy::handleSimConnectMessageCore(SIMCONNECT_RECV* pData)
