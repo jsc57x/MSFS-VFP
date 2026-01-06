@@ -54,10 +54,54 @@ int sendData(SOCKET sock, sockaddr_in addr, const char* row, int length);
 char* convertRowToRaw(std::vector<std::string> rowParts, int* out_len);
 
 char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len);
-char* createSetIndicator(short indicatorID, short indicatorTypeID, double latitude, double longitude, double altitude, double heading, double bank, double pitch, int* out_len);
+char* createSetIndicator(unsigned short indicatorID, unsigned int indicatorTypeID, double latitude, double longitude, double altitude, double heading, double bank, double pitch, int* out_len);
 char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len);
 
 std::vector<std::string> split(const std::string& s);
+
+inline void writeUshortInNetworkByteOrder(unsigned short value, char* dst)
+{
+    char tmp[2];
+    std::memcpy(tmp, &value, 2);
+    for (int i = 0; i < 2; ++i)
+    {
+        dst[i] = tmp[1 - i];
+    }
+}
+
+inline void writeUintInNetworkByteOrder(unsigned int value, char* dst)
+{
+    char tmp[4];
+    std::memcpy(tmp, &value, 4);
+    for (int i = 0; i < 4; ++i)
+    {
+        dst[i] = tmp[3 - i];
+    }
+}
+
+inline void writeDoubleInNetworkByteOrder(double value, char* dst)
+{
+    char tmp[8];
+    std::memcpy(tmp, &value, 8);
+    for (int i = 0; i < 8; ++i)
+    {
+        dst[i] = tmp[7 - i];
+    }
+}
+
+inline double readDoubleinNetworkByteOrder(const char* src)
+{
+    char tmp[8];
+
+    for (int i = 0; i < 8; ++i)
+    {
+        tmp[i] = src[7 - i];
+    }
+
+    double value;
+    std::memcpy(&value, tmp, sizeof(value));
+    return value;
+}
 
 
 int main(int argc, char* argv[])
@@ -293,21 +337,13 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
         std::cerr << "Message received has an invalid length." << std::endl;
     }
 
-    double latitude;
-    double longitude;
-    double altitude;
-    double heading;
-    double bank;
-    double pitch;
-    double speed;
-
-    memcpy(&latitude, rawPosition, sizeof(latitude));
-    memcpy(&longitude , rawPosition + 8, sizeof(longitude));
-    memcpy(&altitude, rawPosition + 16, sizeof(altitude));
-    memcpy(&heading, rawPosition + 24, sizeof(heading));
-    memcpy(&bank, rawPosition + 32, sizeof(bank));
-    memcpy(&pitch, rawPosition + 40, sizeof(pitch));
-    memcpy(&speed, rawPosition + 48, sizeof(speed));
+    double latitude = readDoubleinNetworkByteOrder(rawPosition);
+    double longitude = readDoubleinNetworkByteOrder(rawPosition + 8);
+    double altitude = readDoubleinNetworkByteOrder(rawPosition + 16);
+    double heading = readDoubleinNetworkByteOrder(rawPosition + 24);
+    double bank = readDoubleinNetworkByteOrder(rawPosition + 32);
+    double pitch = readDoubleinNetworkByteOrder(rawPosition + 40);
+    double speed = readDoubleinNetworkByteOrder(rawPosition + 48);
 
     std::cout << "Received plane position: " <<
         "Latitude: " << latitude <<
@@ -320,8 +356,8 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
 
     for (std::vector<std::string> command : commands)
     {
-        short indicatorID = static_cast<short>(std::stoi(command.at(1))); // not very clean but ok for test code
-        long indicatorTypeID = std::stoi(command.at(2));
+        unsigned short indicatorID = static_cast<unsigned short>(std::stoi(command.at(1))); // not very clean but ok for test code
+        unsigned int indicatorTypeID = std::stoi(command.at(2));
 
         // values with offset
         double setLatitude = std::stod(command.at(3)) + latitude;
@@ -371,8 +407,8 @@ char* convertRowToRaw(std::vector<std::string> rowParts, int* out_len)
 
 char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_len)
 {
-    short indicatorID = static_cast<short>(std::stoi(splittedRow.at(1))); // not very clean but ok for test code
-    long indicatorTypeID = std::stoi(splittedRow.at(2));
+    unsigned short indicatorID = static_cast<short>(std::stoi(splittedRow.at(1))); // not very clean but ok for test code
+    unsigned int indicatorTypeID = std::stoi(splittedRow.at(2));
     double latitude = std::stod(splittedRow.at(3));
     double longitude = std::stod(splittedRow.at(4));
     double altitude = std::stod(splittedRow.at(5));
@@ -383,21 +419,21 @@ char* convertSetIndicatorToRaw(std::vector<std::string> splittedRow, int* out_le
     return createSetIndicator(indicatorID, indicatorTypeID, latitude, longitude, altitude, heading, bank, pitch, out_len);
 }
 
-char* createSetIndicator(short indicatorID, short indicatorTypeID, double latitude, double longitude, double altitude, double heading, double bank, double pitch, int* out_len)
+char* createSetIndicator(unsigned short indicatorID, unsigned int indicatorTypeID, double latitude, double longitude, double altitude, double heading, double bank, double pitch, int* out_len)
 {
     *out_len = 56;
     char* rawContent = new char[*out_len] {};
 
     short commandID = 1;
-    memcpy(rawContent, &commandID, sizeof(commandID));
-    memcpy(rawContent + 2, &indicatorID, sizeof(indicatorID));
-    memcpy(rawContent + 4, &indicatorTypeID, sizeof(indicatorTypeID));
-    memcpy(rawContent + 8, &latitude, sizeof(latitude));
-    memcpy(rawContent + 16, &longitude, sizeof(longitude));
-    memcpy(rawContent + 24, &altitude, sizeof(altitude));
-    memcpy(rawContent + 32, &heading, sizeof(heading));
-    memcpy(rawContent + 40, &bank, sizeof(bank));
-    memcpy(rawContent + 48, &pitch, sizeof(pitch));
+    writeUshortInNetworkByteOrder(commandID, rawContent);
+    writeUshortInNetworkByteOrder(indicatorID, rawContent + 2);
+    writeUintInNetworkByteOrder(indicatorTypeID, rawContent + 4);
+    writeDoubleInNetworkByteOrder(latitude, rawContent + 8);
+    writeDoubleInNetworkByteOrder(longitude, rawContent + 16);
+    writeDoubleInNetworkByteOrder(altitude, rawContent + 24);
+    writeDoubleInNetworkByteOrder(heading, rawContent + 32);
+    writeDoubleInNetworkByteOrder(bank, rawContent + 40);
+    writeDoubleInNetworkByteOrder(pitch, rawContent + 48);
 
     return rawContent;
 }
@@ -411,14 +447,14 @@ char* convertRemoveIndicatorToRaw(std::vector<std::string> splittedRow, int* out
     
     char* rawContent = new char[2048] {}; // for tests this buffer has to be larger than the input buffer in VFP
 
-    memcpy(rawContent, &commandID, sizeof(commandID));
+    writeUshortInNetworkByteOrder(commandID, rawContent);
 
     int curPos = 2;
 
     for (int i = 1; i < splittedRow.size(); i++)
     {
-        short indicatorID = static_cast<short>(std::stoi(splittedRow.at(i))); // not very clean but ok for test code
-        memcpy(rawContent + curPos, &indicatorID, sizeof(indicatorID));
+        unsigned short indicatorID = static_cast<unsigned short>(std::stoi(splittedRow.at(i))); // not very clean but ok for test code
+        writeUshortInNetworkByteOrder(indicatorID, rawContent + curPos);
         curPos += sizeof(indicatorID);
     }
 

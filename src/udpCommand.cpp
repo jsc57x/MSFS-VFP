@@ -19,10 +19,9 @@
 #include "udpCommand.h"
 #include "flightPathVisualizer.h"
 #include "log.h"
-#include "doubleHelper.h"
+#include "numberUtils.h"
 
 #include <string>
-#include <memory>
 
 #define LATITUDE_MIN -90.0
 #define LATITUDE_MAX 90.0
@@ -36,23 +35,14 @@
 
 std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfiguration::parse(char* array)
 {
-    ushort id;
-    uint indicatorTypeID;
-    double latitude;
-    double longitude;
-    double altitude;
-    double heading;
-    double bank;
-    double pitch;
-
-    memcpy(&id, array + 2, sizeof(id));
-    memcpy(&indicatorTypeID, array + 4, sizeof(indicatorTypeID));
-    memcpy(&latitude, array + 8, sizeof(latitude));
-    memcpy(&longitude, array + 16, sizeof(longitude));
-    memcpy(&altitude, array + 24, sizeof(altitude));
-    memcpy(&heading, array + 32, sizeof(heading));
-    memcpy(&bank, array + 40, sizeof(bank));
-    memcpy(&pitch, array + 48, sizeof(pitch));
+    ushort id = readUShortNetworkByteOrder(array + 2);
+    uint indicatorTypeID = readUintNetworkByteOrder(array + 4);
+    double latitude = readDoubleinNetworkByteOrder(array + 8);
+    double longitude = readDoubleinNetworkByteOrder(array + 16);
+    double altitude = readDoubleinNetworkByteOrder(array + 24);
+    double heading = readDoubleinNetworkByteOrder(array + 32);
+    double bank = readDoubleinNetworkByteOrder(array + 40);
+    double pitch = readDoubleinNetworkByteOrder(array + 48);
 
     WorldPosition worldPos = WorldPosition(latitude, longitude, altitude, heading, bank, pitch);
     SetIndicatorCommandConfiguration commandConfig = SetIndicatorCommandConfiguration(id, indicatorTypeID, worldPos);
@@ -121,8 +111,7 @@ std::unique_ptr<RemoveIndicatorsCommandConfiguration> RemoveIndicatorsCommandCon
 
     for (uint curMemOffset = 2; curMemOffset < length; curMemOffset = curMemOffset + sizeof(ushort))
     {
-        ushort id;
-        memcpy(&id, array + curMemOffset, sizeof(ushort));
+        ushort id = readUShortNetworkByteOrder(array + curMemOffset);
         command.idsToRemove.push_back(id);
     }
 

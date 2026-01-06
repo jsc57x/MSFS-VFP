@@ -59,7 +59,7 @@
     <ClInclude Include="udpCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doubleHelper.h">
+    <ClInclude Include="numberUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="aircraftState.h">

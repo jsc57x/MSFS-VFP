@@ -19,6 +19,7 @@
 #pragma once
 
 #include <math.h>
+#include "datatypes.h"
 
 /// The precision threshold for double values
 #define DOUBLE_PRECISION 0.0000000001
@@ -45,4 +46,66 @@ inline bool isDoubleInRange(double value, double min, double max)
     if (min > max) std::swap(min, max);
 
     return !(value < min - DOUBLE_PRECISION || value > max + DOUBLE_PRECISION);
+}
+
+inline void writeDoubleInNetworkByteOrder(double value, char* dst)
+{
+    char tmp[8];
+    std::memcpy(tmp, &value, 8);
+    for (int i = 0; i < 8; ++i)
+    {
+        dst[i] = tmp[7 - i];
+    }
+}
+
+inline void writeUshortInNetworkByteOrder(ushort value, char* dst)
+{
+    char tmp[2];
+    std::memcpy(tmp, &value, 2);
+    for (int i = 0; i < 2; ++i)
+    {
+        dst[i] = tmp[1 - i];
+    }
+}
+
+inline ushort readUShortNetworkByteOrder(const char* src)
+{
+    char tmp[2];
+
+    for (int i = 0; i < 2; ++i)
+    {
+        tmp[i] = src[1 - i];
+    }
+
+    ushort value;
+    std::memcpy(&value, tmp, sizeof(value));
+    return value;
+}
+
+inline uint readUintNetworkByteOrder(const char* src)
+{
+    char tmp[4];
+
+    for (int i = 0; i < 4; ++i)
+    {
+        tmp[i] = src[3 - i];
+    }
+
+    uint value;
+    std::memcpy(&value, tmp, sizeof(value));
+    return value;
+}
+
+inline double readDoubleinNetworkByteOrder(const char* src)
+{
+    char tmp[8];
+
+    for (int i = 0; i < 8; ++i)
+    {
+        tmp[i] = src[7 - i];
+    }
+
+    double value;
+    std::memcpy(&value, tmp, sizeof(value));
+    return value;
 }

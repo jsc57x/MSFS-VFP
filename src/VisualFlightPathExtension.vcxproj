@@ -142,7 +142,7 @@
     <ClInclude Include="aircraftState.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="datatypes.h" />
-    <ClInclude Include="doubleHelper.h" />
+    <ClInclude Include="numberUtils.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="stringHelper.h" />
     <ClInclude Include="udpCommand.h" />

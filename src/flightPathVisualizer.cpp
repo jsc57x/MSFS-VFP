@@ -20,6 +20,7 @@
 #include "flightPathVisualizer.h"
 #include "log.h"
 #include "udpCommand.h"
+#include "numberUtils.h"
 
 #include <string>
 #include <iostream>
@@ -60,8 +61,7 @@ std::unique_ptr<AbstractCommandConfiguration> FlightPathVisualizer::parseIncomin
         Logger::logError("Received invalid message (missing command): " + std::string(messageContent, length));
     }
 
-    ushort commandID;
-    memcpy(&commandID, messageContent, sizeof(ushort));
+    ushort commandID = readUShortNetworkByteOrder(messageContent);
 
     // this has to be improved if there are more than two commands
     if (commandID != 1 && commandID != 2)
@@ -110,21 +110,13 @@ void FlightPathVisualizer::handleAircraftStateUpdate(AircraftState aircraftState
     int contentLength = 56;
     char* rawContent = new char[contentLength] {};
 
-    double latitude = aircraftState.getLatitude();
-    double longitude = aircraftState.getLongitude();
-    double altitude = aircraftState.getAltitude();
-    double heading = aircraftState.getHeading();
-    double bank = aircraftState.getBank();
-    double pitch = aircraftState.getPitch();
-    double speed = aircraftState.getSpeed();
-
-    memcpy(rawContent, &latitude, sizeof(latitude));
-    memcpy(rawContent + 8, &longitude, sizeof(longitude));
-    memcpy(rawContent + 16, &altitude, sizeof(altitude));
-    memcpy(rawContent + 24, &heading, sizeof(heading));
-    memcpy(rawContent + 32, &bank, sizeof(bank));
-    memcpy(rawContent + 40, &pitch, sizeof(pitch));
-    memcpy(rawContent + 48, &speed, sizeof(speed));
+    writeDoubleInNetworkByteOrder(aircraftState.getLatitude(), rawContent);
+    writeDoubleInNetworkByteOrder(aircraftState.getLongitude(), rawContent + 8);
+    writeDoubleInNetworkByteOrder(aircraftState.getAltitude(), rawContent + 16);
+    writeDoubleInNetworkByteOrder(aircraftState.getHeading(), rawContent + 24);
+    writeDoubleInNetworkByteOrder(aircraftState.getBank(), rawContent + 32);
+    writeDoubleInNetworkByteOrder(aircraftState.getPitch(), rawContent + 40);
+    writeDoubleInNetworkByteOrder(aircraftState.getSpeed(), rawContent + 48);
 
     udpProxy->sendData(rawContent, contentLength);
 
