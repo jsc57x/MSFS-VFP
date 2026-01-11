@@ -29,6 +29,48 @@
 #define LONGITUDE_MIN -180.0
 #define LONGITUDE_MAX 180.0
 
+ //////////////
+ /// PARSER ///
+ //////////////
+std::unique_ptr<AbstractCommandConfiguration> CommandConfigurationParser::parse(char* raw, uint length)
+{
+    std::unique_ptr<AbstractCommandConfiguration> commandConfiguration = nullptr;
+
+    if (length < sizeof(ushort))
+    {
+        throw std::invalid_argument("missing_command");
+    }
+
+    ushort commandID = readUShortNetworkByteOrder(raw);
+
+    // this has to be improved if there are more than two commands
+    if (commandID != 1 && commandID != 2)
+    {
+        throw std::invalid_argument("unknown_command");
+    }
+
+    if (commandID == 1)
+    {
+        if (length != 56)
+        {
+            throw std::invalid_argument("set_invalid_length");
+        }
+        commandConfiguration = SetIndicatorCommandConfiguration::parse(raw);
+    }
+    else if (commandID == 2)
+    {
+        if (length % 2 != 0)
+        {
+            throw std::invalid_argument("remove_invalid_length");
+        }
+        commandConfiguration = RemoveIndicatorsCommandConfiguration::parse(raw, length);
+    }
+
+    return commandConfiguration;
+}
+
+
+
 //////////////
 ///   SET  ///
 //////////////

@@ -66,29 +66,5 @@ private:
     /// The SimConnect Proxy for data exchange with a running SimConnect application.
     /// </summary>
     SimConnectProxy* simConnectProxy;
-
-    /// <summary>
-    /// Parses the incoming UDP datagram and creates the command configuration.
-    /// </summary>
-    /// <param name="array">UDP data</param>
-    /// <param name="length">Length of UDP data</param>
-    /// <returns>Abstract command configuration</returns>
-    std::unique_ptr<AbstractCommandConfiguration> parseIncomingMessage(char* array, uint length);
-
-    /// <summary>
-    /// Parses the incoming UDP datagram and creates a command configuration to place a SimObject.
-    /// </summary>
-    /// <param name="array">UDP data</param>
-    /// <param name="length">Length of UDP data</param>
-    /// <returns>Set indicator command configuration</returns>
-    std::unique_ptr<SetIndicatorCommandConfiguration> parseSetCommand(char* array, uint length);
-    
-    /// <summary>
-    /// Parses the incoming UDP datagram and creates a command configuration to remove an existing SimObject.
-    /// </summary>
-    /// <param name="array">UDP data</param>
-    /// <param name="length">Length of UDP data</param>
-    /// <returns>Remove indicator command configuration</returns>
-    std::unique_ptr<RemoveIndicatorsCommandConfiguration> parseRemoveCommand(char* array, uint length);
 };
 

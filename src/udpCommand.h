@@ -155,3 +155,9 @@ private:
     /// </summary>
     std::vector<ushort> idsToRemove;
 };
+
+class CommandConfigurationParser
+{
+public:
+    static std::unique_ptr<AbstractCommandConfiguration> parse(char* raw, uint length);
+};

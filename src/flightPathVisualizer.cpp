@@ -43,58 +43,34 @@ void FlightPathVisualizer::start(ushort serverPort, std::string targetIP, ushort
 
 void FlightPathVisualizer::handleMessage(char* message, uint length)
 {
-    std::unique_ptr<AbstractCommandConfiguration> command = parseIncomingMessage(message, length);
+    std::unique_ptr<AbstractCommandConfiguration> command = nullptr;
+    try {
+        command = CommandConfigurationParser::parse(message, length);
+    }
+    catch (std::invalid_argument e)
+    {
+        if (strcmp(e.what(), "missing_command") == 0)
+        {
+            Logger::logError("Received invalid message (missing command): " + std::string(message, length));
+        } else if (strcmp(e.what(), "unknown_command") == 0)
+        {
+            Logger::logError("Received invalid message (invalid command id " + std::to_string(readUShortNetworkByteOrder(message)) + "): " + std::string(message, length));
+        } else if (strcmp(e.what(), "set_invalid_length") == 0)
+        {
+            Logger::logError("Received invalid message (Invalid message length for Set command): " + std::string(message, length));
+        } else if (strcmp(e.what(), "remove_invalid_length") == 0)
+        {
+            Logger::logError("Received invalid message (Invalid message length for Remove command): " + std::string(message, length));
+        }
+    }
 
     // make sure command was parsed and is not null
-    if (command == NULL) return;
+    if (command == nullptr) return;
 
     AbstractCommandConfiguration* commandConfig = command.get();
 
     Logger::logInfo(commandConfig->toString());
     simConnectProxy->handleCommand(commandConfig);
-}
-
-std::unique_ptr<AbstractCommandConfiguration> FlightPathVisualizer::parseIncomingMessage(char* messageContent, uint length)
-{
-    if (length < sizeof(ushort))
-    {
-        Logger::logError("Received invalid message (missing command): " + std::string(messageContent, length));
-    }
-
-    ushort commandID = readUShortNetworkByteOrder(messageContent);
-
-    // this has to be improved if there are more than two commands
-    if (commandID != 1 && commandID != 2)
-    {
-        Logger::logError("Received invalid message (invalid command id " + std::to_string(commandID) + "): " + std::string(messageContent, length));
-
-    }
-
-    // these should be constants
-    if (commandID == 1)
-    {
-        return parseSetCommand(messageContent, length);
-    }
-    else if (commandID == 2)
-    {
-        return parseRemoveCommand(messageContent, length);
-    }
-
-    return NULL;
-}
-
-std::unique_ptr<SetIndicatorCommandConfiguration> FlightPathVisualizer::parseSetCommand(char* message, uint length)
-{
-    if (length != 56)
-    {
-        Logger::logError("Received invalid message (Invalid message length for Set command): " + std::string(message, length));
-    }
-    return SetIndicatorCommandConfiguration::parse(message);
-}
-
-std::unique_ptr<RemoveIndicatorsCommandConfiguration> FlightPathVisualizer::parseRemoveCommand(char* message, uint length)
-{
-    return RemoveIndicatorsCommandConfiguration::parse(message, length);
 }
 
 void FlightPathVisualizer::handleAircraftStateUpdate(AircraftState aircraftState)
