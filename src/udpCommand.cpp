@@ -18,7 +18,6 @@
  */
 #include "udpCommand.h"
 #include "flightPathVisualizer.h"
-#include "log.h"
 #include "numberUtils.h"
 
 #include <string>
@@ -89,32 +88,36 @@ std::unique_ptr<SetIndicatorCommandConfiguration> SetIndicatorCommandConfigurati
     WorldPosition worldPos = WorldPosition(latitude, longitude, altitude, heading, bank, pitch);
     SetIndicatorCommandConfiguration commandConfig = SetIndicatorCommandConfiguration(id, indicatorTypeID, worldPos);
 
+    ValidationResult res = commandConfig.validate();
 
-    if (commandConfig.validate())
+    if(res == OK)
     {
     return std::make_unique<SetIndicatorCommandConfiguration>(commandConfig);
     }
-    else {
-        return nullptr;
+    else if(res == LATITUDE_OUT_OF_RANGE)
+    {
+        throw std::invalid_argument("LATITUDE_OUT_OF_RANGE");
+    }
+    else if (res == LONGITUDE_OUT_OF_RANGE)
+    {
+        throw std::invalid_argument("LONGITUDE_OUT_OF_RANGE");
     }
 
 }
 
-bool SetIndicatorCommandConfiguration::validate()
+ValidationResult SetIndicatorCommandConfiguration::validate()
 {
     if (!isDoubleInRange(position.getLatitude(), LATITUDE_MIN, LATITUDE_MAX))
     {
-        Logger::logError("Latitude is out of range: " + std::to_string(position.getLatitude()));
-        return false;
+        return LATITUDE_OUT_OF_RANGE;
     }
 
     if (!isDoubleInRange(position.getLongitude(), LONGITUDE_MIN, LONGITUDE_MAX))
     {
-        Logger::logError("Longitude is out of range: " + std::to_string(position.getLongitude()));
-        return false;
+        return LONGITUDE_OUT_OF_RANGE;
     }
 
-    return true;
+    return OK;
 }
 
 ushort SetIndicatorCommandConfiguration::getID()

@@ -62,6 +62,14 @@ void FlightPathVisualizer::handleMessage(char* message, uint length)
         {
             Logger::logError("Received invalid message (Invalid message length for Remove command): " + std::string(message, length));
         }
+        else if (strcmp(e.what(), "LATITUDE_OUT_OF_RANGE") == 0)
+        {
+            Logger::logError("Latitude is out of range");
+        }
+        else if (strcmp(e.what(), "LONGITUDE_OUT_OF_RANGE") == 0)
+        {
+            Logger::logError("Longitude is out of range");
+        }
     }
 
     // make sure command was parsed and is not null

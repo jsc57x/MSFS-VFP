@@ -29,6 +29,8 @@
 /// </summary>
 enum Command { SET, REMOVE };
 
+enum ValidationResult {OK, LATITUDE_OUT_OF_RANGE, LONGITUDE_OUT_OF_RANGE,};
+
 /// <summary>
 /// Abstract command configuration which at least provides the specified command.
 /// </summary>
@@ -115,8 +117,8 @@ private:
     /// <summary>
     /// Validates the settings of the command. This is mainly the latitude and longitude of the position.
     /// </summary>
-    /// <returns>true if latitude and longitude are in bounds, false otherwise</returns>
-    bool validate();
+    /// <returns>The result of the validation</returns>
+    ValidationResult validate();
 };
 
 /// <summary>

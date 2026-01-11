@@ -1,0 +1,23 @@
+﻿  VisualFlightPathExtension.Tests.cpp
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(140,20): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(140,20): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(140,38): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(140,38): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(140,50): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(140,50): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,8): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,8): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,20): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,20): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,44): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,44): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,50): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(164,50): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(189,20): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(189,20): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(213,8): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(213,8): warning C4309: 'initializing': truncation of constant value
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(213,20): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+D:\projects\Bachelor\MSFS-VFP\VisualFlightPathExtension.Tests\VisualFlightPathExtension.Tests.cpp(213,20): warning C4309: 'initializing': truncation of constant value
+     Creating library D:\projects\Bachelor\MSFS-VFP\src\x64\Debug\VisualFlightPathExtension.Tests.lib and object D:\projects\Bachelor\MSFS-VFP\src\x64\Debug\VisualFlightPathExtension.Tests.exp
+  VisualFlightPathExtension.Tests.vcxproj -> D:\projects\Bachelor\MSFS-VFP\src\x64\Debug\VisualFlightPathExtension.Tests.dll
