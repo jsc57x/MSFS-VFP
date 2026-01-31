@@ -270,7 +270,7 @@ void handleRaw( std::ifstream& inFile, sockaddr_in addr, SOCKET target)
     {
         std::string row;
         std::getline(inFile, row);
-        sendData(target, addr, row.c_str(), (int)strlen(row.c_str()));
+        sendData(target, addr, row.c_str(), (int)row.size());
     }
 }
 
@@ -356,22 +356,37 @@ void handleIngoingPosition(SOCKET target, sockaddr_in addr, char* rawPosition, i
 
     for (std::vector<std::string> command : commands)
     {
-        unsigned short indicatorID = static_cast<unsigned short>(std::stoi(command.at(1))); // not very clean but ok for test code
-        unsigned int indicatorTypeID = std::stoi(command.at(2));
+        if(command.at(0) == "<set>")
+        {
+            unsigned short indicatorID = static_cast<unsigned short>(std::stoi(command.at(1))); // not very clean but ok for test code
+            unsigned int indicatorTypeID = std::stoi(command.at(2));
 
-        // values with offset
-        double setLatitude = std::stod(command.at(3)) + latitude;
-        double setLongitude = std::stod(command.at(4)) + longitude;
-        double setAltitude = std::stod(command.at(5)) + altitude;
-        double setHeading = std::stod(command.at(6)) + heading;
-        double setBank = std::stod(command.at(7)) + bank;
-        double setPitch = std::stod(command.at(8)) + pitch;
+            // values with offset
+            double setLatitude = std::stod(command.at(3)) + latitude;
+            double setLongitude = std::stod(command.at(4)) + longitude;
+            double setAltitude = std::stod(command.at(5)) + altitude;
+            double setHeading = std::stod(command.at(6)) + heading;
+            double setBank = std::stod(command.at(7)) + bank;
+            double setPitch = std::stod(command.at(8)) + pitch;
 
-        int length;
-        char* rawContent = createSetIndicator(indicatorID, indicatorTypeID, setLatitude, setLongitude, setAltitude, setHeading, setBank, setPitch, &length);
-        sendData(target, addr, rawContent, length);
+            int length;
+            char* rawContent = createSetIndicator(indicatorID, indicatorTypeID, setLatitude, setLongitude, setAltitude, setHeading, setBank, setPitch, &length);
+            sendData(target, addr, rawContent, length);
 
-        delete[] rawContent;
+            delete[] rawContent;
+        }
+        else if (command.at(0) == "<rem>")
+        {
+            int length;
+            char* rawContent = convertRemoveIndicatorToRaw(command, &length);
+            sendData(target, addr, rawContent, length);
+
+        }
+        else if (command.at(0) == "<delay>")
+        {
+            int delay = std::stoi(command.at(1));
+            Sleep(delay);
+        }
     }
 }
 
