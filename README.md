@@ -9,10 +9,10 @@ The repo contains three products
 * A MSFS Add-on with 15 SimObjects 
 * A test system which read files, converts them to commands and sends them over an UDP socket
 
-### Prerequisites
-#### Visual Flight Path Extension
+## Prerequisites
+### Visual Flight Path Extension
 The extension and the test system are Visual Studio 2022 projects. They were development and can be compiled with version 17.14.
 In order to compile the extension, the MSFS 2024 SDK in version 1.2.4. Later versions are incompatible due to a memory leak when trying to connect to SimConnect.
 
-#### MSFS Add-on
+### MSFS Add-on
 The MSFS Add-on can be manipulated and compiled with the MSFS Developer Mode.
